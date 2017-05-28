@@ -4,11 +4,10 @@
 <script src="node_modules/socket.io-client/socket.io.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+	var socket, lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
 
-	$(document).ready(function(){
-
-		var socket = io('192.168.5.112:3000');
-		var lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
+	var init = function(serverAddress){
+		socket = io(serverAddress + ':3000');
 		var ctx = document.getElementById('canvas').getContext('2d');
 
 		socket.on('serverStatus', function(msg){
@@ -24,7 +23,19 @@
 				ctx.drawImage(img, 0, 0, 300, 300);
 			}
 		});
+	}
 
+
+	$(document).ready(function(){
+
+		$('#serverAddress').change(function(){
+			if (socket){
+				socket.close();
+			}
+
+			init($(this).val());
+		}).change();
+		
 
 		var checkRobotIsOnline = function(){
 
@@ -63,23 +74,13 @@
 
 
 
+		$('#status img').on('click', function(){
+			socket.emit('userCommand', {'command':'LIGAR_NOTEBOOK'})
+		});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		$('#webcamRange').on('change', function(){
+			socket.emit('userCommand', {'command':'MOVE_WEBCAM:' + $(this).val()})
+		});
 
 
 		$('.btn').click(function(){
@@ -92,10 +93,8 @@
 			var command = $(this).attr('command');
 			socket.emit('userCommand', command);
 		});
+
 	});
-
-	
-
 
 </script>
 
@@ -175,15 +174,36 @@
 		width: 25%;
 		background: none;
 	}
+	#webcamRange{
+	    -webkit-appearance: slider-vertical;
+    	height: 100px;
+    	width: 30px;
+	}
+	input[type=range]::-webkit-slider-thumb {
+	    -webkit-appearance: none;
+	    border: none;
+	    height: 16px;
+	    width: 16px;
+	    border-radius: 50%;
+	    background: goldenrod;
+	    margin-top: -4px;
+	}
 
 </style>
 
 <body onload="">
-
+	Ambiente:
+	<select id="serverAddress">
+		<option value="192.168.0.102">dev</option>
+		<option value="nossomine.sytes.net:8079">Produção</option>
+	</select>
 	<div id='status'>
 		<img src="images/robot.svg" class='disabled' alt="ROBO">
 	</div>
 
+	<div id='webcamPosition'>
+		Câmera: <br><input id="webcamRange" type="range" min ="0" max="100" step ="5" value="10"/>
+	</div>
 	<div class='buttons'>
 		<div class='btn top' command="FRENTE"><img src="images/front.svg"></div>
 
