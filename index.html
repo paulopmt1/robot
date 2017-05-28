@@ -7,7 +7,7 @@
 	var socket, lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
 
 	var init = function(serverAddress){
-		socket = io(serverAddress + ':3000');
+		socket = io(serverAddress);
 		var ctx = document.getElementById('canvas').getContext('2d');
 
 		socket.on('serverStatus', function(msg){
@@ -194,8 +194,8 @@
 <body onload="">
 	Ambiente:
 	<select id="serverAddress">
-		<option value="192.168.0.102">dev</option>
-		<option value="nossomine.sytes.net:8079">Produção</option>
+		<option value="192.168.0.102:3000">dev</option>
+		<option value="nossomine.sytes.net:3000">Produção</option>
 	</select>
 	<div id='status'>
 		<img src="images/robot.svg" class='disabled' alt="ROBO">
