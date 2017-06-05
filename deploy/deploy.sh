@@ -9,12 +9,12 @@ fi
 /usr/bin/git -c core.askpass=true fetch --tags --progress git@github.com:paulopmt1/robot.git +refs/heads/*:refs/remotes/origin/*
 
 # Faz checkout para a ultima versao
-#commit="$(/usr/bin/git rev-parse refs/remotes/origin/master^{commit})"
-#printf "\nEfetuando checkout para o commit mais recente em master: $commit\n"
-#/usr/bin/git checkout -f "$commit"
+commit="$(/usr/bin/git rev-parse refs/remotes/origin/master^{commit})"
+printf "\nEfetuando checkout para o commit mais recente em master: $commit\n"
+/usr/bin/git checkout -f "$commit"
 
-/usr/bin/git checkout -f master
-/usr/bin/git pull
+#/usr/bin/git checkout -f master
+#/usr/bin/git pull
 
 cd /var/www/html/robot
 cp robot.ino /home/pi/arduino-testes/Arduino-Makefile/examples/Blink/
