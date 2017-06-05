@@ -14,3 +14,8 @@ fi
 #/usr/bin/git checkout -f "$commit"
 
 /usr/bin/git checkout -f master
+
+cd /var/www/html/robot
+cp robot.ino /home/pi/arduino-testes/Arduino-Makefile/examples/Blink/
+cd /home/pi/arduino-testes/Arduino-Makefile/examples/Blink/
+make && avrdude -p m2560 -c wiring -P /dev/ttyACM0 -b 115200 -F -U flash:w:build-mega2560/Blink.hex
