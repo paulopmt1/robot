@@ -45,7 +45,10 @@ void loop() {
         int value = desiredPosition.toInt();
         Serial.println(value);
         int convertedValue = map(value, 0,100,145,80);
-        
+       
+
+	myservo.write(convertedValue); 
+	/*
         // deixa mais suave a mudança do servo
         if (convertedValue > servoValue){
             for (int i = servoValue; i >= convertedValue; i++){
@@ -58,7 +61,7 @@ void loop() {
                 delay(100);
             }
         }
-        
+        */
         servoValue = convertedValue;
 
         //Serial1.print("Recebido: ");
