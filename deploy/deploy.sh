@@ -14,6 +14,7 @@ fi
 #/usr/bin/git checkout -f "$commit"
 
 /usr/bin/git checkout -f master
+/usr/bin/git pull
 
 cd /var/www/html/robot
 cp robot.ino /home/pi/arduino-testes/Arduino-Makefile/examples/Blink/
