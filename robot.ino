@@ -50,12 +50,12 @@ void loop() {
         if (convertedValue > servoValue){
             for (int i = servoValue; i >= convertedValue; i++){
                 myservo.write(i);
-                delay(100);
+                delay(300);
             }
         }else{
             for (int i = servoValue; i <= convertedValue; i--){
                 myservo.write(i);
-                delay(100);
+                delay(300);
             }
         }
         
