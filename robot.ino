@@ -44,8 +44,23 @@ void loop() {
         Serial.print("movimentar camera: ");
         int value = desiredPosition.toInt();
         Serial.println(value);
+        int convertedValue = map(value, 0,100,145,80);
         
-        myservo.write(map(value, 0,100,145,80));
+        // deixa mais suave a mudança do servo
+        if (convertedValue > servoValue){
+            for (int i = servoValue; i >= convertedValue; i++){
+                myservo.write(i);
+                delay(100);
+            }
+        }else{
+            for (int i = servoValue; i <= convertedValue; i--){
+                myservo.write(i);
+                delay(100);
+            }
+        }
+        
+        servoValue = convertedValue;
+
         //Serial1.print("Recebido: ");
         //Serial1.println(recebido);
       }else
