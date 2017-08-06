@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+<style media="print" src="print.css"></style>
+
+
+<style type="text/css">
+@media print {
+
+.bar1{
+	width: 70px;
+	height: 4px;
+	margin-bottom: 5px;
+	background: #000;
+	-webkit-print-color-adjust: exact;
+}
+
+.bar2{
+	width: 70px;
+	height: 4px;
+	margin-bottom: 7px;
+	background: #000;	
+	-webkit-print-color-adjust: exact;
+}
+
+.bar3{
+	width: 70px;
+	height: 4px;
+	margin-bottom: 10px;
+	background: #000;	
+	-webkit-print-color-adjust: exact;
+}
+
+.bar4{
+	width: 70px;
+	height: 6px;
+	margin-bottom: 10px;
+	background: #000;	
+	-webkit-print-color-adjust: exact;
+}
+
+
+.bars{
+	margin-left: 50px;
+	width: 100px;
+	float: left;
+	-webkit-print-color-adjust: exact;
+}
+
+
+
+}
+
+.bar1{
+	width: 70px;
+	height: 4px;
+	margin-bottom: 5px;
+	background: #000;
+}
+
+.bar2{
+	width: 70px;
+	height: 4px;
+	margin-bottom: 7px;
+	background: #000;	
+}
+
+.bar3{
+	width: 70px;
+	height: 4px;
+	margin-bottom: 10px;
+	background: #000;	
+}
+
+.bar4{
+	width: 70px;
+	height: 6px;
+	margin-bottom: 10px;
+	background: #000;	
+}
+
+
+.bars{
+	margin-left: 50px;
+	width: 100px;
+	float: left;
+}
+
+</style>
+</head>
+<body id="body">
+<div id=bars1 class=bars></div>
+<div id=bars2 class=bars></div>
+<div id=bars3 class=bars></div>
+<div id=bars4 class=bars></div>
+</body>
+</html>
+
+
+
+
+<script type="text/javascript">
+	
+	var barNumber = 200;
+
+
+	for (var i = 0; i < barNumber; i++){
+		
+			var el = document.createElement("div");
+			el.className = 'bar1';
+			document.getElementById('bars1').appendChild(el)
+		
+			var el = document.createElement("div");
+			el.className = 'bar2';
+			document.getElementById('bars2').appendChild(el)
+		
+
+			var el = document.createElement("div");
+			el.className = 'bar3';
+			document.getElementById('bars3').appendChild(el)
+
+			var el = document.createElement("div");
+			el.className = 'bar4';
+			document.getElementById('bars4').appendChild(el)
+	}
+
+</script>
