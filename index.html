@@ -14,6 +14,10 @@
 			lastOnlineTime = new Date();
 		});
 
+		socket.on('robotData', function(msg){
+			console.log(msg);
+		});
+
 		socket.on('imageBlob', function(msg){
 			console.log('imagem recebida:', msg.buffer.length)
 
@@ -85,10 +89,10 @@
 
 		$('.btn').click(function(){
 
-			if ( ! isOnline){
+			/*if ( ! isOnline){
 				setStatus('Robô está offline');
 				return;
-			}
+			}*/
 
 			var command = $(this).attr('command');
 			socket.emit('userCommand', command);
@@ -194,7 +198,7 @@
 <body onload="">
 	Ambiente:
 	<select id="serverAddress">
-		<option value="nossomine.sytes.net:3000">Produção</option>
+		<option value="54.94.244.175:3000">Produção</option>
 		<option value="192.168.0.102:3000">dev</option>
 	</select>
 	<div id='status'>
@@ -205,15 +209,15 @@
 		Câmera: <br><input id="webcamRange" type="range" min ="0" max="100" step ="5" value="10"/>
 	</div>
 	<div class='buttons'>
-		<div class='btn top' command="FRENTE"><img src="images/front.svg"></div>
+		<div class='btn top' command="W"><img src="images/front.svg"></div>
 
 		<div class='center'>
-			<div class='btn left' command="ESQUERDA"><img src="images/left.svg"></div>
+			<div class='btn left' command="A"><img src="images/left.svg"></div>
 			<div class='btn cancel' command="DESLIGAR"><img src="images/cancel.svg"></div>
-			<div class='btn right' command="DIREITA"><img src="images/right.svg"></div>
+			<div class='btn right' command="D"><img src="images/right.svg"></div>
 		</div>
 
-		<div class='btn bottom' command="TRAS"><img src="images/forward.svg"></div>
+		<div class='btn bottom' command="S"><img src="images/forward.svg"></div>
 	</div>
 
 	<div id='connectionStatus'>
