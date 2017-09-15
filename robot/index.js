@@ -40,5 +40,10 @@ port.on('data', function(data){
 });
 
 var sendToSerial = function(msg){
-  port.write(msg);
+  port.write(msg , function(err) {
+      if (err){
+          console.log("Erro na serial: ");
+          console.log(err.message);
+      }
+  });
 };
