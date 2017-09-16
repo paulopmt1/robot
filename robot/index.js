@@ -1,9 +1,15 @@
 var serverAddress = 'http://54.94.244.175';
-var serverPort = 3000;
+var serverPort = 3001;
 var serialPort = '/dev/ttyAMA0';
 
 var socket = require('socket.io-client')(serverAddress + ':' + serverPort);
-socket.on('connect', function(){});
+
+socket.on('connect', function(){
+    socket.emit('identify', {
+        type: 'robot'
+    });
+});
+
 socket.on('event', function(data){});
 socket.on('disconnect', function(){});
 

@@ -2,15 +2,19 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs');
-var activeConnections = 0;
+var activeConnections = [];
 
 io.on('connection', function(socket){
-  activeConnections++;
-
   var socketId = socket.id;
   var clientIp = socket.request.connection.remoteAddress;
-  console.log('Novo cliente de ' + clientIp);
   
+  activeConnections.push({
+      id: socketId,
+      ip: clientIp,
+      type: 'undefined'
+  });
+  
+  printClientsOnConsole();
   socket.emit('userCommand', "AUTENTICADO");
 
   socket.on('userCommand', function(msg){
@@ -19,22 +23,66 @@ io.on('connection', function(socket){
   });
 
   socket.on('robotData', function(msg){
-    console.log("Recebido do robô: " + msg);
+//    console.log("Recebido do robô: " + msg);
     io.emit('robotData', msg);
   });
+  
+  socket.on('identify', function(msg){
+      var host = findHostById(socket.id);
+      host.type = msg.type;
+      
+      switch (msg.type){
+          case 'robot':
+            console.log('Temos um robô disponível!');
+            break;
+            
+          default:
+            console.log('Não sei quem é este host: ' + msg.type);
+      }
+      
+      printClientsOnConsole();
+  });
 
-
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-    activeConnections--;
+  socket.on('disconnect', function(reason){
+    console.log('Usuário ' + this.request.connection.remoteAddress + ' desconectado');
+    removeHostFromActiveConnections(this.id);
+    printClientsOnConsole();
   });
 });
 
 
-app.get('/', function(req, res){
-  res.send('<h1>Conexões ativas: ' + activeConnections  + '</h1>');
+function removeHostFromActiveConnections(id){
+    for (var i = 0; i < activeConnections.length; i++){
+        if (activeConnections[i].id === id){
+            activeConnections.splice(i, 1);
+        }
+    }
+}
+
+function findHostById(id){
+    for (var i = 0; i < activeConnections.length; i++){
+        if (activeConnections[i].id === id){
+            return activeConnections[i];
+        }
+    }
+    
+    return false;
+}
+
+function printClientsOnConsole(){
+    console.log('');
+    console.log('Clientes ativos:');
+    console.log(activeConnections);
+};
+
+app.get('/', function(req, response){
+//    response.writeHead(200, {"Content-Type": "application/json"});
+    
+    var connections = JSON.stringify(activeConnections);
+    response.json(activeConnections);
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(3001, function(){
+  console.log('listening on *:3001');
 });
+
