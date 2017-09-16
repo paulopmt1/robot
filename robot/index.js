@@ -22,17 +22,14 @@ socket.on('userCommand', function(msg){
 
 var SerialPort = require("serialport");
 var port = new SerialPort(serialPort, {
-  baudRate: 9600,
+  baudRate: 115200,
   parser: SerialPort.parsers.readline('\n')
 });
 
 port.on('open', function() {
-  port.write('main screen turn on', function(err) {
-    if (err) {
-      return console.log('Error on write: ', err.message);
-    }
-    console.log('message written');
-  });
+    console.log('Porta ' + serialPort + ' aberta com sucesso!');
+    console.log('Testando conexão com Arduino...');
+    sendToSerial('OI');
 });
  
 // open errors will be emitted as an error event 
@@ -41,8 +38,14 @@ port.on('error', function(err) {
 });
 
 port.on('data', function(data){
-  console.log("Recebido da serial: " + data);
-  socket.emit('robotData', data);
+    if (data == "OI"){
+      console.log('Comunicação com Arduino está 100%!');
+    }
+  
+    console.log("Recebido da serial: " + data);
+    socket.emit('robotData', data);
+  
+  
 });
 
 var sendToSerial = function(msg){
@@ -50,6 +53,8 @@ var sendToSerial = function(msg){
       if (err){
           console.log("Erro na serial: ");
           console.log(err.message);
+      }else{
+          console.log('Comando enviado com sucesso: ' + msg);
       }
   });
 };

@@ -1,6 +1,7 @@
 int entireRoundStep = 125;
-int enginePower = 100;
-int stepsPerAction = 40;
+int enginePower = 130;
+int stepsPerActionOnRun = 20;
+int stepsPerActionOnTurn = 5;
 
 
 const int sensorRightPin = A0;
@@ -13,8 +14,8 @@ const int sensorLeftMiddleValue = 350;
 int sensorLeftLastState = 0;
 int sensorLeftStepCount = 0;
 
-
-
+unsigned long serialCommandStartedTimeInMs;
+int serialCommandTimeoutInSeconds = 2;
 
 int xAxisData;
 int yAxisData;
@@ -39,13 +40,14 @@ bool serialCommandInitialized = false;
 
 void proccessLeftMotor();
 void proccessRightMotor();
-
+boolean serialCommandTimeout();
 
 
 
 void setup(){
   Serial.begin(115200);
   Serial.println("Inicio ok");
+  Serial1.begin(115200);
   
   
   pinMode(xAxis, INPUT);
@@ -65,10 +67,12 @@ void setup(){
 void loop(){
   readStepSensors();
   processSerialCommand();
-  
+
+  /*  
     Serial.print(sensorLeftStepCount);
     Serial.print(" - ");
     Serial.println(sensorRightStepCount);
+    */
 }
 
 
@@ -92,21 +96,36 @@ String leStringSerial(){
   String conteudo = "";
   char caractere;
   
-  // Enquanto receber algo pela serial
-  while(Serial.available() > 0) {
-    // Lê byte da serial
-    caractere = Serial.read();
-    // Ignora caractere de quebra de linha
-    if (caractere != '\n'){
-      // Concatena valores
-      conteudo.concat(caractere);
+  if (Serial.available() > 0){
+    // Enquanto receber algo pela serial
+    while(Serial.available() > 0) {
+      // Lê byte da serial
+      caractere = Serial.read();
+      // Ignora caractere de quebra de linha
+      if (caractere != '\n'){
+        // Concatena valores
+        conteudo.concat(caractere);
+      }
+      // Aguarda buffer serial ler próximo caractere
+      delay(10);
     }
-    // Aguarda buffer serial ler próximo caractere
-    delay(10);
   }
-    
-  Serial.print("Recebi: ");
-  Serial.println(conteudo);
+  
+  
+  else if (Serial1.available() > 0){
+    // Enquanto receber algo pela serial
+    while(Serial1.available() > 0) {
+      // Lê byte da serial
+      caractere = Serial1.read();
+      // Ignora caractere de quebra de linha
+      if (caractere != '\n'){
+        // Concatena valores
+        conteudo.concat(caractere);
+      }
+      // Aguarda buffer serial ler próximo caractere
+      delay(10);
+    }
+  }
     
   return conteudo;
 }
@@ -117,11 +136,17 @@ String leStringSerial(){
 
 void processSerialCommand(){
 
-  if (Serial.available() > 0){
+  if (Serial.available() > 0 || Serial1.available() > 0){
 
     serialCommandInitialized = true;
+    serialCommandStartedTimeInMs = millis();
     
     String recebido = leStringSerial();
+
+    if (recebido == "OI"){
+      Serial.println("OI");
+      Serial1.println("OI");
+    }
 
     if (recebido == "D"){
       goRight();
@@ -168,12 +193,20 @@ void goRight(){
 }
 
 
+boolean serialCommandTimeout(){
+  if (millis() - serialCommandStartedTimeInMs > serialCommandTimeoutInSeconds * 1000){
+    return true;
+  }
+  
+  return false;
+}
+
 
 void goLeftWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerAction / 2){
+  while(sensorRightStepCount < stepsPerActionOnTurn && ! serialCommandTimeout()){
    
     if (sensorRightStepCount > sensorLeftStepCount){
       goBackLeftBridge();
@@ -190,9 +223,11 @@ void goLeftWithBalancing(){
       goFrontRightBridge();
     }
     
+    /*
     Serial.print(sensorLeftStepCount);
     Serial.print(" - ");
     Serial.println(sensorRightStepCount);
+    */
     
     readStepSensors();
   }
@@ -206,7 +241,7 @@ void goRightWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerAction / 2){
+  while(sensorRightStepCount < stepsPerActionOnTurn && ! serialCommandTimeout()){
    
     if (sensorRightStepCount > sensorLeftStepCount){
       goFrontLeftBridge();
@@ -223,9 +258,11 @@ void goRightWithBalancing(){
       goFrontLeftBridge();
     }
     
+    /*
     Serial.print(sensorLeftStepCount);
     Serial.print(" - ");
     Serial.println(sensorRightStepCount);
+    */
     
     readStepSensors();
   }
@@ -239,7 +276,7 @@ void goFrontWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerAction){
+  while(sensorRightStepCount < stepsPerActionOnRun && ! serialCommandTimeout()){
    
     if (sensorRightStepCount > sensorLeftStepCount){
       goFrontLeftBridge();
@@ -256,9 +293,11 @@ void goFrontWithBalancing(){
       goFrontRightBridge();
     }
     
+    /*
     Serial.print(sensorLeftStepCount);
     Serial.print(" - ");
     Serial.println(sensorRightStepCount);
+    */
     
     readStepSensors();
   }
@@ -270,7 +309,7 @@ void goBackWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerAction){
+  while(sensorRightStepCount < stepsPerActionOnRun && ! serialCommandTimeout()){
     
     if (sensorRightStepCount == sensorLeftStepCount){
       goBackLeftBridge();
@@ -287,9 +326,11 @@ void goBackWithBalancing(){
       disableLeftBridge();
     }
     
+    /*
     Serial.print(sensorLeftStepCount);
     Serial.print(" - ");
     Serial.println(sensorRightStepCount);
+    */
     
     readStepSensors();
   }
