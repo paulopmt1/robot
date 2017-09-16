@@ -35,6 +35,9 @@ io.on('connection', function(socket){
           case 'robot':
             console.log('Temos um robô disponível!');
             break;
+          case 'html-client':
+            console.log('Temos um usuário disponível!');
+            break;
             
           default:
             console.log('Não sei quem é este host: ' + msg.type);

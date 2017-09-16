@@ -10,6 +10,12 @@
 		socket = io(serverAddress);
 		var ctx = document.getElementById('canvas').getContext('2d');
 
+                socket.on('connect', function(){
+                    socket.emit('identify', {
+                        type: 'html-client'
+                    });
+                });
+
 		socket.on('serverStatus', function(msg){
 			lastOnlineTime = new Date();
 		});
