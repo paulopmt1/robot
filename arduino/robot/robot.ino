@@ -1,7 +1,9 @@
 int entireRoundStep = 125;
 int enginePower = 130;
 int stepsPerActionOnRun = 20;
-int stepsPerActionOnTurn = 5;
+int stepsPerActionOnTurn = 1;
+// Timeout para aguardar proximo comando da serial antes de parar os motores
+int serialReceiveTimeoutInMs = 200;
 
 
 const int sensorRightPin = A0;
@@ -15,7 +17,7 @@ int sensorLeftLastState = 0;
 int sensorLeftStepCount = 0;
 
 unsigned long serialCommandStartedTimeInMs;
-int serialCommandTimeoutInSeconds = 2;
+int executionCommandTimeoutInSeconds = 2;
 
 int xAxisData;
 int yAxisData;
@@ -33,14 +35,14 @@ int rightBridge_NPN_B = 10;
 int xAxis = 2;
 int yAxis = 3;
 
-bool serialCommandInitialized = false;
-
+boolean serialCommandInitialized = false;
+boolean stopNowSolicited = false;
 
 
 
 void proccessLeftMotor();
 void proccessRightMotor();
-boolean serialCommandTimeout();
+boolean executionCommandTimeout();
 
 
 
@@ -68,6 +70,14 @@ void loop(){
   readStepSensors();
   processSerialCommand();
 
+
+  if (needsToStopNow() && serialLastCommandTimeout()){
+    disableLeftBridge();
+    disableRightBridge();
+    stopNowSolicited = false;
+    Serial.println("Parei de verdade");
+  }
+
   /*  
     Serial.print(sensorLeftStepCount);
     Serial.print(" - ");
@@ -85,6 +95,10 @@ void readStepSensors(){
 
 
 
+
+boolean needsToStopNow(){
+  return stopNowSolicited;
+}
 
 
 
@@ -172,8 +186,7 @@ void processSerialCommand(){
 
 
 void stopNow(){
-  disableLeftBridge();
-  disableRightBridge();
+  stopNowSolicited = true;
 }
 
 void goFront(){
@@ -193,8 +206,16 @@ void goRight(){
 }
 
 
-boolean serialCommandTimeout(){
-  if (millis() - serialCommandStartedTimeInMs > serialCommandTimeoutInSeconds * 1000){
+boolean executionCommandTimeout(){
+  if (millis() - serialCommandStartedTimeInMs > executionCommandTimeoutInSeconds * 1000){
+    return true;
+  }
+  
+  return false;
+}
+
+boolean serialLastCommandTimeout(){
+  if (millis() - serialCommandStartedTimeInMs > serialReceiveTimeoutInMs){
     return true;
   }
   
@@ -206,7 +227,7 @@ void goLeftWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerActionOnTurn && ! serialCommandTimeout()){
+  while(sensorRightStepCount < stepsPerActionOnTurn && ! executionCommandTimeout()){
    
     if (sensorRightStepCount > sensorLeftStepCount){
       goBackLeftBridge();
@@ -241,7 +262,7 @@ void goRightWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerActionOnTurn && ! serialCommandTimeout()){
+  while(sensorRightStepCount < stepsPerActionOnTurn && ! executionCommandTimeout()){
    
     if (sensorRightStepCount > sensorLeftStepCount){
       goFrontLeftBridge();
@@ -276,7 +297,7 @@ void goFrontWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerActionOnRun && ! serialCommandTimeout()){
+  while(sensorRightStepCount < stepsPerActionOnRun && ! executionCommandTimeout()){
    
     if (sensorRightStepCount > sensorLeftStepCount){
       goFrontLeftBridge();
@@ -309,7 +330,7 @@ void goBackWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerActionOnRun && ! serialCommandTimeout()){
+  while(sensorRightStepCount < stepsPerActionOnRun && ! executionCommandTimeout()){
     
     if (sensorRightStepCount == sensorLeftStepCount){
       goBackLeftBridge();
