@@ -5,9 +5,16 @@ int stepsPerActionOnTurn = 1;
 // Timeout para aguardar proximo comando da serial antes de parar os motores
 int serialReceiveTimeoutInMs = 200;
 
+const int powerOnPin = 12;
+const int powerInVoltage = A7;
+int batteryLevel = 0;
+int sameResultsOnBatteryStatusCount = 0;
+
+// Garante que o sistema desligue se a bateria chegar a 11.6V
+int batteryMinimumLevelInStep = 650; 
 
 const int sensorRightPin = A0;
-const int sensorDirMiddleValue = 300;
+const int sensorDirMiddleValue = 390;
 int sensorRightLastState = 0;
 int sensorRightStepCount = 0;
 
@@ -51,6 +58,7 @@ void setup(){
   Serial.println("Inicio ok");
   Serial1.begin(115200);
   
+  pinMode(powerOnPin, OUTPUT);
   
   pinMode(xAxis, INPUT);
   pinMode(yAxis, INPUT);
@@ -64,12 +72,16 @@ void setup(){
   pinMode(rightBridge_NPN_A, OUTPUT);
   pinMode(rightBridge_PNP_B, OUTPUT);
   pinMode(rightBridge_NPN_B, OUTPUT);
+  
+  powerUp();
+  
 }
 
 void loop(){
+  readBatteryLevel();
+  checkIfNeedsToShutdown();
   readStepSensors();
   processSerialCommand();
-
 
   if (needsToStopNow() && serialLastCommandTimeout()){
     disableLeftBridge();
@@ -86,6 +98,37 @@ void loop(){
 }
 
 
+int readBatteryLevel(){
+  batteryLevel = analogRead(powerInVoltage);
+  Serial.println(batteryLevel);
+  return batteryLevel;
+}
+
+void checkIfNeedsToShutdown(){
+  
+  if (readBatteryLevel() <= batteryMinimumLevelInStep){
+    sameResultsOnBatteryStatusCount++;
+    
+    Serial.print("Pico de uso da bateria: ");
+    Serial.println(sameResultsOnBatteryStatusCount);
+    
+    if (sameResultsOnBatteryStatusCount == 10){
+      powerDown();
+      Serial.println("Desligado para nao afetar a bateria");
+    }
+  }else{
+    sameResultsOnBatteryStatusCount = 0;
+  }
+  
+}
+
+
+void powerUp(){
+  digitalWrite(powerOnPin, HIGH);
+}
+void powerDown(){
+  digitalWrite(powerOnPin, LOW);
+}
 
 void readStepSensors(){
   proccessRightMotor();
@@ -161,6 +204,11 @@ void processSerialCommand(){
       Serial.println("OI");
       Serial1.println("OI");
     }
+    
+    if (recebido == "BATERIA"){
+      Serial.println("BATERIA: " + batteryLevel);
+      Serial1.println("BATERIA: " + batteryLevel);
+    }
 
     if (recebido == "D"){
       goRight();
@@ -179,7 +227,7 @@ void processSerialCommand(){
     }
 
     else {
-      stopNow();
+      //stopNow();
     }
   }
 }
@@ -293,6 +341,13 @@ void goRightWithBalancing(){
 
 
 
+
+
+
+
+
+
+
 void goFrontWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
@@ -314,11 +369,11 @@ void goFrontWithBalancing(){
       goFrontRightBridge();
     }
     
-    /*
+    
     Serial.print(sensorLeftStepCount);
     Serial.print(" - ");
     Serial.println(sensorRightStepCount);
-    */
+    
     
     readStepSensors();
   }
@@ -412,6 +467,10 @@ void proccessRightMotor(){
   
   int sensorRightValue = analogRead(sensorRightPin);
   
+  if (sensorRightValue < 100){
+    Serial.println("Parece que o sensor da roda da direita esta com problemas");
+  }
+  
   //Serial.println(sensorRightValue);
   boolean changed = 0;
   
@@ -429,14 +488,16 @@ void proccessRightMotor(){
   
   if (changed){
     sensorRightStepCount++;
-    //Serial.println(sensorRightStepCount);
-
-    /*    
+    
+    /*
+    Serial.println(sensorRightStepCount);
+    
     if (sensorRightStepCount == entireRoundStep){
       Serial.println("Volta completa");
       sensorRightStepCount = 0;
     }
     */
+    
   }
   
 }
@@ -445,6 +506,10 @@ void proccessRightMotor(){
 void proccessLeftMotor(){
   
   int sensorLeftValue = analogRead(sensorLeftPin);
+  
+  if (sensorLeftValue < 100){
+    Serial.println("Parece que o sensor da roda da esquerd esta com problemas");
+  }
   
   //Serial.println(sensorRightValue);
   boolean changed = 0;
@@ -463,14 +528,16 @@ void proccessLeftMotor(){
   
   if (changed){
     sensorLeftStepCount++;
-    //Serial.println(sensorLeftStepCount);
-
-    /*    
+    
+    /*
+    Serial.println(sensorLeftStepCount);
+     
     if (sensorLeftStepCount == entireRoundStep){
       Serial.println("Volta completa");
       sensorLeftStepCount = 0;
     }
     */
+
   }
   
 }
