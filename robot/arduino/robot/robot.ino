@@ -10,8 +10,8 @@ const int powerInVoltage = A7;
 int batteryLevel = 0;
 int sameResultsOnBatteryStatusCount = 0;
 
-// Garante que o sistema desligue se a bateria chegar a 11.6V
-int batteryMinimumLevelInStep = 650; 
+// Garante que o sistema desligue se a bateria chegar a 9.5V
+int batteryMinimumLevelInStep = 480; 
 
 const int sensorRightPin = A0;
 const int sensorDirMiddleValue = 390;
@@ -54,9 +54,9 @@ boolean executionCommandTimeout();
 
 
 void setup(){
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("Inicio ok");
-  Serial1.begin(115200);
+  Serial1.begin(9600);
   
   pinMode(powerOnPin, OUTPUT);
   
@@ -100,7 +100,7 @@ void loop(){
 
 int readBatteryLevel(){
   batteryLevel = analogRead(powerInVoltage);
-  Serial.println(batteryLevel);
+  //Serial.println(batteryLevel);
   return batteryLevel;
 }
 
@@ -158,11 +158,10 @@ String leStringSerial(){
     while(Serial.available() > 0) {
       // Lê byte da serial
       caractere = Serial.read();
-      // Ignora caractere de quebra de linha
-      if (caractere != '\n'){
-        // Concatena valores
-        conteudo.concat(caractere);
-      }
+      
+      // Concatena valores
+      conteudo.concat(caractere);
+
       // Aguarda buffer serial ler próximo caractere
       delay(10);
     }
@@ -170,20 +169,23 @@ String leStringSerial(){
   
   
   else if (Serial1.available() > 0){
+    
     // Enquanto receber algo pela serial
     while(Serial1.available() > 0) {
       // Lê byte da serial
       caractere = Serial1.read();
-      // Ignora caractere de quebra de linha
-      if (caractere != '\n'){
-        // Concatena valores
-        conteudo.concat(caractere);
-      }
+      
+      // Concatena valores
+      conteudo.concat(caractere);
+      
       // Aguarda buffer serial ler próximo caractere
       delay(10);
     }
   }
-    
+
+  // Remove caracteres especiais
+  conteudo.trim();
+  
   return conteudo;
 }
 
@@ -210,7 +212,8 @@ void processSerialCommand(){
       Serial1.println("BATERIA: " + batteryLevel);
     }
 
-    if (recebido == "D"){
+    if (recebido.equals("D")){
+      Serial.println(recebido);
       goRight();
     }
 
