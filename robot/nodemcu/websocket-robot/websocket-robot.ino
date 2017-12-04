@@ -14,7 +14,7 @@ WebSocketsClient webSocket;
 
 #define USE_SERIAL Serial
 
-#define MESSAGE_INTERVAL 3000
+#define MESSAGE_INTERVAL 100
 #define HEARTBEAT_INTERVAL 2500
 
 uint64_t messageTimestamp = 0;
@@ -59,7 +59,7 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 
 void setup() {
     // USE_SERIAL.begin(921600);
-    USE_SERIAL.begin(9600);
+    USE_SERIAL.begin(57600);
 
     //Serial.setDebugOutput(true);
     USE_SERIAL.setDebugOutput(true);
@@ -75,6 +75,9 @@ void setup() {
       }
 
     WiFiMulti.addAP("999mor", "999mor20171720");
+    WiFiMulti.addAP("rom666", "rom66620171720");
+    WiFiMulti.addAP("auryn", "deployautomatico");
+    WiFiMulti.addAP("aurynadm", "deployautomatico");
 
     //WiFi.disconnect();
     while(WiFiMulti.run() != WL_CONNECTED) {
@@ -101,8 +104,18 @@ void loop() {
             //webSocket.sendTXT("42[\"messageType\",{\"greeting\":\"hello\"}]");
             
             //webSocket.sendTXT("42[\"userCommand\",\"S\"]");
+            //int data = millis();
             
+            //webSocket.sendTXT("42[\"robotData\",{\"data\":\""+ String(data) +"\"}]"); 
         }
+    }
+
+    
+    if (USE_SERIAL.available()){
+      String data = leStringSerial();
+
+      webSocket.sendTXT("42[\"robotData\",{\"data\":\""+ data +"\"}]"); 
+      //USE_SERIAL.println("enviado dados da serial para websocket");
     }
 }
 
@@ -157,6 +170,36 @@ String getValue(String data, char separator, int index)
         }
     }
     return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
+
+
+/**
+ * Função que lê uma string da Serial
+ * e retorna-a
+ */
+String leStringSerial(){
+  String conteudo = "";
+  char caractere;
+  
+  if (USE_SERIAL.available() > 0){
+    // Enquanto receber algo pela serial
+    while(USE_SERIAL.available() > 0) {
+      // Lê byte da serial
+      caractere = USE_SERIAL.read();
+      
+      // Concatena valores
+      conteudo.concat(caractere);
+
+      // Aguarda buffer serial ler próximo caractere
+      delay(10);
+    }
+  }
+  
+  // Remove caracteres especiais
+  conteudo.trim();
+  
+  return conteudo;
 }
 
 

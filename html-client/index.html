@@ -110,21 +110,25 @@
                     switch (data.keyCode){
                         case 87:
                         case 38:
+                            data.preventDefault();
                             socket.emit('userCommand', 'W');
                             break;
                             
                         case 83:
                         case 40:
+                            data.preventDefault();
                             socket.emit('userCommand', 'S');
                             break;
                             
                         case 65:
                         case 37:
+                            data.preventDefault();
                             socket.emit('userCommand', 'A');
                             break;
                             
                         case 68:
                         case 39:
+                            data.preventDefault();
                             socket.emit('userCommand', 'D');
                             break;
                     }
