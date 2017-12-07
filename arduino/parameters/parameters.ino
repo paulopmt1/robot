@@ -4,6 +4,7 @@
 #define DEBUG_SENSOR_WHEEL 1
 #define DEBUG_BALANCING 1
 #define DEBUG_MOTORS 1
+#define DEBUG_SERIAL 1
 //#define DEBUG_BATTERY 1
 
 int entireRoundStep = 125;
@@ -59,5 +60,5 @@ boolean stopNowSolicited = false;
 void proccessLeftMotor();
 void proccessRightMotor();
 boolean executionCommandTimeout();
-
+void serialFlush();
 

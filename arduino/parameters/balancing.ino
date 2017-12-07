@@ -1,5 +1,4 @@
 
-
 void goFrontWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
@@ -14,18 +13,18 @@ void goFrontWithBalancing(){
     else if (sensorRightStepCount < sensorLeftStepCount){
       goFrontRightBridge();
       disableLeftBridge();
-    } 
-    
+    }
+      
     else{
       goFrontLeftBridge();
       goFrontRightBridge();
     }
     
-    
+    /*
     MYSERIAL.print(sensorLeftStepCount);
     MYSERIAL.print(" - ");
     MYSERIAL.println(sensorRightStepCount);
-    
+    */
     
     readStepSensors();
   }

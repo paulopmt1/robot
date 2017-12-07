@@ -111,25 +111,25 @@
                         case 87:
                         case 38:
                             data.preventDefault();
-                            socket.emit('userCommand', 'W');
+                            socket.emit('userCommand', '|W');
                             break;
                             
                         case 83:
                         case 40:
                             data.preventDefault();
-                            socket.emit('userCommand', 'S');
+                            socket.emit('userCommand', '|S');
                             break;
                             
                         case 65:
                         case 37:
                             data.preventDefault();
-                            socket.emit('userCommand', 'A');
+                            socket.emit('userCommand', '|A');
                             break;
                             
                         case 68:
                         case 39:
                             data.preventDefault();
-                            socket.emit('userCommand', 'D');
+                            socket.emit('userCommand', '|D');
                             break;
                     }
                     
@@ -246,15 +246,15 @@
 		Câmera: <br><input id="webcamRange" type="range" min ="0" max="100" step ="5" value="10"/>
 	</div>
 	<div class='buttons'>
-		<div class='btn top' command="W"><img src="images/front.svg"></div>
+		<div class='btn top' command="|W"><img src="images/front.svg"></div>
 
 		<div class='center'>
-			<div class='btn left' command="A"><img src="images/left.svg"></div>
-			<div class='btn cancel' command="DESLIGAR"><img src="images/cancel.svg"></div>
-			<div class='btn right' command="D"><img src="images/right.svg"></div>
+			<div class='btn left' command="|A"><img src="images/left.svg"></div>
+			<div class='btn cancel' command="|T"><img src="images/cancel.svg"></div>
+			<div class='btn right' command="|D"><img src="images/right.svg"></div>
 		</div>
 
-		<div class='btn bottom' command="S"><img src="images/forward.svg"></div>
+		<div class='btn bottom' command="|S"><img src="images/forward.svg"></div>
 	</div>
 
 	<div id='connectionStatus'>

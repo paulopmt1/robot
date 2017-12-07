@@ -11,6 +11,12 @@ void processSerialCommand(){
     
     String recebido = leStringSerial();
 
+    #ifdef DEBUG_SERIAL
+      MYSERIAL.print("recebido: ");
+      MYSERIAL.println(recebido);
+    #endif
+    
+    
     if (recebido == "OI"){
       MYSERIAL.println("OI");
     }
@@ -20,9 +26,8 @@ void processSerialCommand(){
       MYSERIAL.print(getBatteryLevelInPercentage());
       MYSERIAL.println("%");
     }
-
-    MYSERIAL.println(recebido);
-
+    
+    
     if (recebido.equals("D")){
       goRight();
     }
@@ -59,8 +64,11 @@ void processSerialCommand(){
     else {
       //stopNow();
     }
+    
 
     digitalWrite(ledSerialPin, 0);
+
+    serialFlush();
   }
 }
 
@@ -78,11 +86,15 @@ String leStringSerial(){
     // Enquanto receber algo pela serial
     while(Serial.available() > 0) {
       // Lê byte da serial
-      caractere = Serial.read();
+      caractere = Serial1.read();
+
+      if (validateCommand(caractere)){
+        return String(caractere);
+      }
       
       // Concatena valores
       conteudo.concat(caractere);
-
+      
       // Aguarda buffer serial ler próximo caractere
       delay(10);
     }
@@ -92,9 +104,13 @@ String leStringSerial(){
   else if (Serial1.available() > 0){
     
     // Enquanto receber algo pela serial
-    while(Serial1.available() > 0) {
+    while(Serial1.available() > 0) {    
       // Lê byte da serial
       caractere = Serial1.read();
+
+      if (validateCommand(caractere)){
+        return String(caractere);
+      }
       
       // Concatena valores
       conteudo.concat(caractere);
@@ -119,4 +135,26 @@ boolean serialLastCommandTimeout(){
   return false;
 }
 
+
+char lastChar = NULL;
+
+boolean validateCommand(char character){
+  char validCommands[] = {'A','D','W','S','T'};
+
+  for (int i = 0; i < sizeof(validCommands); i++){
+    if (lastChar == '|' && validCommands[i] == character){
+      lastChar = character;
+      return true;
+    }    
+  }
+
+  lastChar = character;
+  return false;
+}
+
+
+void serialFlush(){
+  while(Serial.available()){Serial.read();}
+  while(Serial1.available()){Serial1.read();}
+}
 
