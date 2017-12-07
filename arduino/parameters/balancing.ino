@@ -4,6 +4,18 @@ void goFrontWithBalancing(){
   sensorLeftStepCount = 0;
   
   while(sensorRightStepCount < stepsPerActionOnRun && ! executionCommandTimeout()){
+   #ifdef DEBUG_BALANCING 
+      MYSERIAL.print("GO_FRONT: ");
+      MYSERIAL.print(" - stepsPerActionOnTurn: ");
+      MYSERIAL.print(stepsPerActionOnTurn);
+      
+      MYSERIAL.print(" - sensorRightStepCount: ");
+      MYSERIAL.print(sensorRightStepCount);
+      MYSERIAL.print(" - sensorLeftStepCount: ");
+      MYSERIAL.print(sensorLeftStepCount);
+      MYSERIAL.println();
+    #endif
+
    
     if (sensorRightStepCount > sensorLeftStepCount){
       goFrontLeftBridge();
@@ -20,12 +32,6 @@ void goFrontWithBalancing(){
       goFrontRightBridge();
     }
     
-    /*
-    MYSERIAL.print(sensorLeftStepCount);
-    MYSERIAL.print(" - ");
-    MYSERIAL.println(sensorRightStepCount);
-    */
-    
     readStepSensors();
   }
   
@@ -38,6 +44,17 @@ void goBackWithBalancing(){
   sensorLeftStepCount = 0;
   
   while(sensorRightStepCount < stepsPerActionOnRun && ! executionCommandTimeout()){
+   #ifdef DEBUG_BALANCING 
+      MYSERIAL.print("GO_BACK: ");
+      MYSERIAL.print(" - stepsPerActionOnTurn: ");
+      MYSERIAL.print(stepsPerActionOnTurn);
+      
+      MYSERIAL.print(" - sensorRightStepCount: ");
+      MYSERIAL.print(sensorRightStepCount);
+      MYSERIAL.print(" - sensorLeftStepCount: ");
+      MYSERIAL.print(sensorLeftStepCount);
+      MYSERIAL.println();
+    #endif
     
     if (sensorRightStepCount == sensorLeftStepCount){
       goBackLeftBridge();
@@ -52,13 +69,7 @@ void goBackWithBalancing(){
     else if (sensorLeftStepCount > sensorRightStepCount){
       goBackRightBridge();
       disableLeftBridge();
-    }
-    
-    /*
-    MYSERIAL.print(sensorLeftStepCount);
-    MYSERIAL.print(" - ");
-    MYSERIAL.println(sensorRightStepCount);
-    */
+    }    
     
     readStepSensors();
   }
@@ -100,12 +111,6 @@ void goLeftWithBalancing(){
       goFrontRightBridge();
     }
     
-    /*
-    MYSERIAL.print(sensorLeftStepCount);
-    MYSERIAL.print(" - ");
-    MYSERIAL.println(sensorRightStepCount);
-    */
-    
     readStepSensors();
   }
   
@@ -145,12 +150,6 @@ void goRightWithBalancing(){
       goBackRightBridge();
       goFrontLeftBridge();
     }
-    
-    /*
-    MYSERIAL.print(sensorLeftStepCount);
-    MYSERIAL.print(" - ");
-    MYSERIAL.println(sensorRightStepCount);
-    */
     
     readStepSensors();
   }
