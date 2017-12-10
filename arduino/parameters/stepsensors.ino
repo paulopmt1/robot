@@ -1,4 +1,17 @@
 
+int rightSensorMinValue = 70;
+int rightSensorMaxValue = 125;
+
+int leftSensorMinValue = 200;
+int leftSensorMaxValue = 500;
+
+int getRightSensorMiddleValue(){
+  return (rightSensorMinValue + rightSensorMaxValue) / 2;
+}
+
+int getLeftSensorMiddleValue(){
+  return (leftSensorMinValue + leftSensorMaxValue) / 2;
+}
 
 void readStepSensors(){
   proccessRightMotor();
@@ -11,13 +24,29 @@ void proccessRightMotor(){
   int sensorRightValue = analogRead(sensorRightPin);
   
   if (sensorRightValue < 100){
-    MYSERIAL.println("Parece que o sensor da roda da direita esta com problemas");
+    //MYSERIAL.println("Parece que o sensor da roda da direita esta com problemas");
+  }
+
+  if (sensorRightValue < rightSensorMinValue){
+    MYSERIAL.print("Alterando valor minimo do sensor right para: ");
+    MYSERIAL.println(sensorRightValue);
+    rightSensorMinValue = sensorRightValue;
   }
   
-  //debugPrintln(sensorRightValue);
+  if (sensorRightValue > rightSensorMaxValue){
+    MYSERIAL.print("Alterando valor maximo do sensor right para: ");
+    MYSERIAL.println(sensorRightValue);
+    rightSensorMaxValue = sensorRightValue;
+  }
+
+  #ifdef DEBUG_SENSOR_WHEEL_RAW_RIGHT
+    MYSERIAL.print("SENSOR_RIGHT_RAW_VALUE: ");
+    MYSERIAL.println(sensorRightValue);
+  #endif
+  
   boolean changed = 0;
   
-  if (sensorRightValue <= sensorDirMiddleValue){
+  if (sensorRightValue <= getRightSensorMiddleValue()){
     if (sensorRightLastState != 0){
       sensorRightLastState = 0;
       changed = 1;
@@ -54,11 +83,27 @@ void proccessLeftMotor(){
   if (sensorLeftValue < 100){
     MYSERIAL.println("Parece que o sensor da roda da esquerd esta com problemas");
   }
+
+  if (sensorLeftValue < leftSensorMinValue){
+    MYSERIAL.print("Alterando valor minimo do sensor left para: ");
+    MYSERIAL.println(sensorLeftValue);
+    leftSensorMinValue = sensorLeftValue;
+  }
   
-  //debugPrintln(sensorRightValue);
+  if (sensorLeftValue > leftSensorMaxValue){
+    MYSERIAL.print("Alterando valor maximo do sensor left para: ");
+    MYSERIAL.println(sensorLeftValue);
+    leftSensorMaxValue = sensorLeftValue;
+  }
+  
+  #ifdef DEBUG_SENSOR_WHEEL_RAW_LEFT
+    MYSERIAL.print("SENSOR_LEFT_RAW_VALUE: ");
+    MYSERIAL.println(sensorLeftValue);
+  #endif
+  
   boolean changed = 0;
   
-  if (sensorLeftValue <= sensorLeftMiddleValue){
+  if (sensorLeftValue <= getLeftSensorMiddleValue()){
     if (sensorLeftLastState != 0){
       sensorLeftLastState = 0;
       changed = 1;

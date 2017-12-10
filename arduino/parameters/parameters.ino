@@ -2,6 +2,7 @@
 #define MYSERIAL Serial
 
 #define DEBUG_SENSOR_WHEEL 1
+//#define DEBUG_SENSOR_WHEEL_RAW_RIGHT 1
 #define DEBUG_BALANCING 1
 #define DEBUG_MOTORS 1
 #define DEBUG_SERIAL 1
@@ -24,12 +25,12 @@ int batteryMinimumLevelInStep = 480;
 int batteryMaximumLevelInStep = 700;
 
 const int sensorRightPin = A0;
-const int sensorDirMiddleValue = 390;
+//const int sensorDirMiddleValue = 115;
 int sensorRightLastState = 0;
 int sensorRightStepCount = 0;
 
 const int sensorLeftPin = A1;
-const int sensorLeftMiddleValue = 350;
+//const int sensorLeftMiddleValue = 350;
 int sensorLeftLastState = 0;
 int sensorLeftStepCount = 0;
 
