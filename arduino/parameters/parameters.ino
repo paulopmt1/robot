@@ -10,7 +10,7 @@
 #define DEBUG_BATTERY 1
 
 int entireRoundStep = 125;
-int enginePower = 100;
+int enginePower = 120;
 int stepsPerActionOnRun = 2;
 int stepsPerActionOnTurn = 1;
 // Timeout para aguardar proximo comando da serial antes de parar os motores
