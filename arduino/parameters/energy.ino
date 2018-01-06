@@ -1,4 +1,9 @@
 
+unsigned long previousMillis = 0;
+bool isConnectedToChargerBase();
+void startBatteryCharging();
+bool isChargingStatus = false;
+
 int readBatteryLevel(){
   batteryLevel = analogRead(powerInVoltage);
 
@@ -45,3 +50,52 @@ void powerUp(){
 void powerDown(){
   digitalWrite(powerOnPin, LOW);
 }
+
+
+void checkChargingBase(){
+  if (isConnectedToChargerBase()){
+    #ifdef DEBUG_BATTERY
+      MYSERIAL.println("Conectado a base de carregamento da bateria");
+    #endif
+
+    unsigned long currentMillis = millis();
+
+    if (currentMillis - previousMillis >= timeInSecondsToStartCharging * 1000 && getBatteryLevelInPercentage() < 80 && ! isChargingStatus) {
+      #ifdef DEBUG_BATTERY
+        MYSERIAL.println("Iniciando carregamento da bateria");
+      #endif
+      
+      startBatteryCharging();
+    }
+  }else{
+    isChargingStatus = false;
+    previousMillis = millis();
+  }
+}
+
+void startBatteryCharging(){
+  isChargingStatus = true;
+  
+  // Ativacao do rele eh invertida
+  digitalWrite(externalBatteryChargerPin, 0);
+  delay(2000);
+  digitalWrite(externalBatteryChargerPin, 1);
+  delay(1000);
+  digitalWrite(externalBatteryChargerPin, 0);
+  delay(1000);
+  digitalWrite(externalBatteryChargerPin, 1);
+
+  #ifdef DEBUG_BATTERY
+    MYSERIAL.println("Carregamento da bateria iniciado");
+  #endif
+}
+
+bool isConnectedToChargerBase(){
+  
+  if (digitalRead(externalPowerPin)){
+    return true;
+  }
+
+  return false;
+}
+

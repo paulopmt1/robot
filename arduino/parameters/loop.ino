@@ -4,6 +4,7 @@ void loop(){
   checkIfNeedsToShutdown();
   readStepSensors();
   processSerialCommand();
+  checkChargingBase();
 
   if (needsToStopNow() && serialLastCommandTimeout()){
     disableLeftBridge();

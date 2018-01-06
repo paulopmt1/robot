@@ -3,7 +3,7 @@ int rightSensorMinValue = 70;
 int rightSensorMaxValue = 125;
 
 int leftSensorMinValue = 200;
-int leftSensorMaxValue = 500;
+int leftSensorMaxValue = 450;
 
 int getRightSensorMiddleValue(){
   return (rightSensorMinValue + rightSensorMaxValue) / 2;
