@@ -1,13 +1,16 @@
 
 #define MYSERIAL Serial
 
-#define DEBUG_SENSOR_WHEEL 1
 //#define DEBUG_SENSOR_WHEEL_RAW_RIGHT 1
+#define DEBUG_SENSOR_WHEEL_STEP_RIGHT 1
+
 //#define DEBUG_SENSOR_WHEEL_RAW_LEFT 1
-#define DEBUG_BALANCING 1
+//#define DEBUG_SENSOR_WHEEL_STEP_LEFT 1
+
+//#define DEBUG_BALANCING 1
 #define DEBUG_MOTORS 1
 #define DEBUG_SERIAL 1
-#define DEBUG_BATTERY 1
+//#define DEBUG_BATTERY 1
 
 int entireRoundStep = 125;
 int enginePower = 120;
@@ -25,6 +28,7 @@ int sameResultsOnBatteryStatusCount = 0;
 const int externalPowerPin = 23;
 const int externalBatteryChargerPin = 22;
 const int timeInSecondsToStartCharging = 3;
+const int batteryPercentageToStartCharging = 80;
 
 // Garante que o sistema desligue se a bateria chegar a 9.5V
 int batteryMinimumLevelInStep = 480;

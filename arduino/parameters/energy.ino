@@ -60,7 +60,7 @@ void checkChargingBase(){
 
     unsigned long currentMillis = millis();
 
-    if (currentMillis - previousMillis >= timeInSecondsToStartCharging * 1000 && getBatteryLevelInPercentage() < 80 && ! isChargingStatus) {
+    if (currentMillis - previousMillis >= timeInSecondsToStartCharging * 1000 && getBatteryLevelInPercentage() < batteryPercentageToStartCharging && ! isChargingStatus) {
       #ifdef DEBUG_BATTERY
         MYSERIAL.println("Iniciando carregamento da bateria");
       #endif

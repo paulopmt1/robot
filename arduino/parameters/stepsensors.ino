@@ -1,6 +1,6 @@
 
-int rightSensorMinValue = 70;
-int rightSensorMaxValue = 125;
+int rightSensorMinValue = 450;
+int rightSensorMaxValue = 650;
 
 int leftSensorMinValue = 200;
 int leftSensorMaxValue = 450;
@@ -13,10 +13,18 @@ int getLeftSensorMiddleValue(){
   return (leftSensorMinValue + leftSensorMaxValue) / 2;
 }
 
+int getLeftSensorOffset(){
+  return (leftSensorMaxValue - leftSensorMinValue) / 3;
+}
+
+int getRightSensorOffset(){
+  return (rightSensorMaxValue - rightSensorMinValue) / 2.8;
+}
+
+
 void readStepSensors(){
   proccessRightMotor();
   proccessLeftMotor();
-  delay(10);
 }
 
 void proccessRightMotor(){
@@ -46,14 +54,16 @@ void proccessRightMotor(){
   
   boolean changed = 0;
   
-  if (sensorRightValue <= getRightSensorMiddleValue()){
-    if (sensorRightLastState != 0){
-      sensorRightLastState = 0;
-      changed = 1;
-    }
-  }else{
+  if (sensorRightValue > rightSensorMaxValue - getRightSensorOffset()){
     if (sensorRightLastState != 1){
       sensorRightLastState = 1;
+      changed = 1;
+    }
+  }
+  
+  if (sensorRightValue < rightSensorMinValue + getRightSensorOffset()){
+    if (sensorRightLastState != 0){
+      sensorRightLastState = 0;
       changed = 1;
     }
   }
@@ -61,7 +71,7 @@ void proccessRightMotor(){
   if (changed){
     sensorRightStepCount++;
     
-    #ifdef DEBUG_SENSOR_WHEEL
+    #ifdef DEBUG_SENSOR_WHEEL_STEP_RIGHT
       MYSERIAL.print("SENSOR_RIGHT: ");
       MYSERIAL.println(sensorRightStepCount);
       
@@ -75,24 +85,29 @@ void proccessRightMotor(){
   
 }
 
-
 void proccessLeftMotor(){
   
   int sensorLeftValue = analogRead(sensorLeftPin);
   
   if (sensorLeftValue < 100){
-    MYSERIAL.println("Parece que o sensor da roda da esquerd esta com problemas");
+    MYSERIAL.println("Parece que o sensor da roda da esquerda esta com problemas");
   }
 
   if (sensorLeftValue < leftSensorMinValue){
-    MYSERIAL.print("Alterando valor minimo do sensor left para: ");
-    MYSERIAL.println(sensorLeftValue);
+    #ifdef DEBUG_SENSOR_WHEEL_STEP_LEFT
+      MYSERIAL.print("Alterando valor minimo do sensor left para: ");
+      MYSERIAL.println(sensorLeftValue);
+    #endif
+    
     leftSensorMinValue = sensorLeftValue;
   }
   
   if (sensorLeftValue > leftSensorMaxValue){
-    MYSERIAL.print("Alterando valor maximo do sensor left para: ");
-    MYSERIAL.println(sensorLeftValue);
+    #ifdef DEBUG_SENSOR_WHEEL_STEP_LEFT
+      MYSERIAL.print("Alterando valor maximo do sensor left para: ");
+      MYSERIAL.println(sensorLeftValue);
+    #endif
+    
     leftSensorMaxValue = sensorLeftValue;
   }
   
@@ -103,14 +118,16 @@ void proccessLeftMotor(){
   
   boolean changed = 0;
   
-  if (sensorLeftValue <= getLeftSensorMiddleValue()){
-    if (sensorLeftLastState != 0){
-      sensorLeftLastState = 0;
-      changed = 1;
-    }
-  }else{
+  if (sensorLeftValue > leftSensorMaxValue - getLeftSensorOffset()){
     if (sensorLeftLastState != 1){
       sensorLeftLastState = 1;
+      changed = 1;
+    }
+  }
+  
+  if (sensorLeftValue < leftSensorMinValue + getLeftSensorOffset()){
+    if (sensorLeftLastState != 0){
+      sensorLeftLastState = 0;
       changed = 1;
     }
   }
@@ -118,7 +135,7 @@ void proccessLeftMotor(){
   if (changed){
     sensorLeftStepCount++;
     
-    #ifdef DEBUG_SENSOR_WHEEL
+    #ifdef DEBUG_SENSOR_WHEEL_STEP_LEFT
       MYSERIAL.print("SENSOR_LEFT: ");
       MYSERIAL.println(sensorLeftStepCount);
        
