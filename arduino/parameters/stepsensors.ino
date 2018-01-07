@@ -1,6 +1,6 @@
 
-int rightSensorMinValue = 450;
-int rightSensorMaxValue = 650;
+int rightSensorMinValue = 150;
+int rightSensorMaxValue = 350;
 
 int leftSensorMinValue = 200;
 int leftSensorMaxValue = 450;
