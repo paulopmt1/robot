@@ -1,18 +1,19 @@
 
+
 void goFrontWithBalancing(){
   sensorRightStepCount = 0;
   sensorLeftStepCount = 0;
   
-  while(sensorRightStepCount < stepsPerActionOnRun && ! executionCommandTimeout()){
+  while(sensorRightStepCount <= stepsPerActionOnRun && sensorLeftStepCount <= stepsPerActionOnRun && ! executionCommandTimeout()){
    #ifdef DEBUG_BALANCING 
       MYSERIAL.print("GO_FRONT: ");
-      MYSERIAL.print(" - stepsPerActionOnTurn: ");
-      MYSERIAL.print(stepsPerActionOnTurn);
+      MYSERIAL.print(" - stepsPerActionOnRun: ");
+      MYSERIAL.print(stepsPerActionOnRun);
       
-      MYSERIAL.print(" - sensorRightStepCount: ");
-      MYSERIAL.print(sensorRightStepCount);
       MYSERIAL.print(" - sensorLeftStepCount: ");
       MYSERIAL.print(sensorLeftStepCount);
+      MYSERIAL.print(" - sensorRightStepCount: ");
+      MYSERIAL.print(sensorRightStepCount);
       MYSERIAL.println();
     #endif
 
