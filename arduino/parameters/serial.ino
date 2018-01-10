@@ -26,6 +26,10 @@ void processSerialCommand(){
       MYSERIAL.print(getBatteryLevelInPercentage());
       MYSERIAL.println("%");
     }
+
+    if (recebido == "{command:LIGAR_NOTEBOOK}"){
+      powerUpNotebook();
+    }
     
     
     if (recebido.equals("D")){

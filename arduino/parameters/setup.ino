@@ -22,6 +22,8 @@ void setup(){
   pinMode(rightBridge_PNP_B, OUTPUT);
   pinMode(rightBridge_NPN_B, OUTPUT);
 
+  pinMode(powerUpNotebookPin, OUTPUT);
+  digitalWrite(powerUpNotebookPin, HIGH);
   pinMode(externalBatteryChargerPin, OUTPUT);
   digitalWrite(externalBatteryChargerPin, HIGH);
   

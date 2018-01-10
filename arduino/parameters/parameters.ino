@@ -5,12 +5,13 @@
 //#define DEBUG_SENSOR_WHEEL_STEP_RIGHT 1
 
 //#define DEBUG_SENSOR_WHEEL_RAW_LEFT 1
-//#define DEBUG_SENSOR_WHEEL_STEP_LEFT 1
+#define DEBUG_SENSOR_WHEEL_STEP_LEFT 1
 
 #define DEBUG_BALANCING 1
 #define DEBUG_MOTORS 1
 #define DEBUG_SERIAL 1
 //#define DEBUG_BATTERY 1
+#define DEBUG_NOTEBOOK 1
 
 int entireRoundStep = 125;
 int enginePower = 120;
@@ -21,6 +22,7 @@ int serialReceiveTimeoutInMs = 200;
 
 const int powerOnPin = 12;
 const int powerInVoltage = A7;
+const int powerUpNotebookPin = 24;
 int batteryLevel = 0;
 int sameResultsOnBatteryStatusCount = 0;
 

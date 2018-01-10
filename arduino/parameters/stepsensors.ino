@@ -2,8 +2,10 @@
 int rightSensorMinValue = 150;
 int rightSensorMaxValue = 350;
 
-int leftSensorMinValue = 200;
-int leftSensorMaxValue = 450;
+int leftSensorMinValue = 150;
+int leftSensorMaxValue = 300;
+
+const int sensorWrongValueMin = 50;
 
 int getRightSensorMiddleValue(){
   return (rightSensorMinValue + rightSensorMaxValue) / 2;
@@ -31,8 +33,8 @@ void proccessRightMotor(){
   
   int sensorRightValue = analogRead(sensorRightPin);
   
-  if (sensorRightValue < 100){
-    //MYSERIAL.println("Parece que o sensor da roda da direita esta com problemas");
+  if (sensorRightValue < sensorWrongValueMin){
+    MYSERIAL.println("Parece que o sensor da roda da direita esta com problemas");
   }
 
   if (sensorRightValue < rightSensorMinValue){
@@ -89,7 +91,7 @@ void proccessLeftMotor(){
   
   int sensorLeftValue = analogRead(sensorLeftPin);
   
-  if (sensorLeftValue < 100){
+  if (sensorLeftValue < sensorWrongValueMin){
     MYSERIAL.println("Parece que o sensor da roda da esquerda esta com problemas");
   }
 
