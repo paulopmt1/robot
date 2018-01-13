@@ -5,16 +5,16 @@
 //#define DEBUG_SENSOR_WHEEL_STEP_RIGHT 1
 
 //#define DEBUG_SENSOR_WHEEL_RAW_LEFT 1
-#define DEBUG_SENSOR_WHEEL_STEP_LEFT 1
+//#define DEBUG_SENSOR_WHEEL_STEP_LEFT 1
 
 #define DEBUG_BALANCING 1
 #define DEBUG_MOTORS 1
 #define DEBUG_SERIAL 1
-//#define DEBUG_BATTERY 1
-#define DEBUG_NOTEBOOK 1
+#define DEBUG_BATTERY 1
+//#define DEBUG_NOTEBOOK 1
 
 int entireRoundStep = 125;
-int enginePower = 120;
+int enginePower = 80;
 int stepsPerActionOnRun = 2;
 int stepsPerActionOnTurn = 1;
 // Timeout para aguardar proximo comando da serial antes de parar os motores
@@ -32,9 +32,9 @@ const int externalBatteryChargerPin = 22;
 const int timeInSecondsToStartCharging = 3;
 const int batteryPercentageToStartCharging = 80;
 
-// Garante que o sistema desligue se a bateria chegar a 9.5V
-int batteryMinimumLevelInStep = 480;
-int batteryMaximumLevelInStep = 700;
+// Garante que o sistema desligue se a bateria chegar a 13.3V
+int batteryMinimumLevelInStep = 680;
+int batteryMaximumLevelInStep = 860;
 
 const int sensorRightPin = A0;
 //const int sensorDirMiddleValue = 115;

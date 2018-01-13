@@ -1,11 +1,11 @@
 
-int rightSensorMinValue = 150;
-int rightSensorMaxValue = 350;
+int rightSensorMinValue = 100;
+int rightSensorMaxValue = 100;
 
-int leftSensorMinValue = 150;
-int leftSensorMaxValue = 300;
+int leftSensorMinValue = 100;
+int leftSensorMaxValue = 100;
 
-const int sensorWrongValueMin = 50;
+const int sensorWrongValueMin = 20;
 
 int getRightSensorMiddleValue(){
   return (rightSensorMinValue + rightSensorMaxValue) / 2;
