@@ -10,7 +10,7 @@
 #define DEBUG_BALANCING 1
 #define DEBUG_MOTORS 1
 #define DEBUG_SERIAL 1
-#define DEBUG_BATTERY 1
+//#define DEBUG_BATTERY 1
 //#define DEBUG_NOTEBOOK 1
 
 int entireRoundStep = 125;

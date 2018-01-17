@@ -21,10 +21,12 @@ void processSerialCommand(){
       MYSERIAL.println("OI");
     }
     
-    if (recebido == "BATERIA" || recebido == "B"){
+    if (recebido == "{command:BATERIA}"){
       MYSERIAL.print("BATERIA: ");
       MYSERIAL.print(getBatteryLevelInPercentage());
       MYSERIAL.println("%");
+      Serial1.println("BATERIA:" + String(getBatteryLevelInPercentage()));
+      //Serial1.println("{robotData:\"BATERIA\",status\":" + String(getBatteryLevelInPercentage()) + "}");
     }
 
     if (recebido == "{command:LIGAR_NOTEBOOK}"){
