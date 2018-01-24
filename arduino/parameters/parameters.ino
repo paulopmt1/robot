@@ -34,7 +34,7 @@ const int batteryPercentageToStartCharging = 80;
 
 // Garante que o sistema desligue se a bateria chegar a 13.3V
 int batteryMinimumLevelInStep = 680;
-int batteryMaximumLevelInStep = 860;
+int batteryMaximumLevelInStep = 830;
 
 const int sensorRightPin = A0;
 //const int sensorDirMiddleValue = 115;
@@ -82,4 +82,5 @@ void goBackLeftBridge();
 void goBackRightBridge();
 boolean executionCommandTimeout();
 void serialFlush();
+void printBatteryLevel();
 

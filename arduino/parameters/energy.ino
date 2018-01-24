@@ -1,5 +1,6 @@
 
 unsigned long previousMillis = 0;
+unsigned long lastBatteryStatusSentMillis = 0;
 bool isConnectedToChargerBase();
 void startBatteryCharging();
 bool isChargingStatus = false;
@@ -97,5 +98,20 @@ bool isConnectedToChargerBase(){
   }
 
   return false;
+}
+
+void sendBatteryStatus(){
+  if (lastBatteryStatusSentMillis + 30000 < millis()){
+    lastBatteryStatusSentMillis = millis();
+    printBatteryLevel();
+  }
+  
+}
+
+void printBatteryLevel(){
+  MYSERIAL.print("BATERIA: ");
+  MYSERIAL.print(getBatteryLevelInPercentage());
+  MYSERIAL.println("%");
+  Serial1.println("BATERIA:" + String(readBatteryLevel()));
 }
 
