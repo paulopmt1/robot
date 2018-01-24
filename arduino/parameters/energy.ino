@@ -1,25 +1,65 @@
 
 unsigned long previousMillis = 0;
 unsigned long lastBatteryStatusSentMillis = 0;
+unsigned long lastBatteryReadMillis = 0;
+
+const int batteryReadSamples = 30;
+int batteryReads[batteryReadSamples];
+int batteryReadPointer = 0;
+
 bool isConnectedToChargerBase();
 void startBatteryCharging();
 bool isChargingStatus = false;
 
 int readBatteryLevel(){
-  batteryLevel = analogRead(powerInVoltage);
+  
+  if (lastBatteryReadMillis + 1000 < millis()){
+    lastBatteryReadMillis = millis();
 
-  #ifdef DEBUG_BATTERY
-    MYSERIAL.print("VALOR BATERIA: ");
-    MYSERIAL.print(batteryLevel);
-    MYSERIAL.print(" OU ");
-    MYSERIAL.print(getBatteryLevelInPercentage());
-    MYSERIAL.print("%  ");
-    MYSERIAL.print("   MINIMO: ");
-    MYSERIAL.print(batteryMinimumLevelInStep);
-    MYSERIAL.print(" - MAXIMO: ");
-    MYSERIAL.println(batteryMaximumLevelInStep);
-  #endif
+    makeBatteryRead();
+    batteryLevel = getBatteryMediaLevel();
+
+    #ifdef DEBUG_BATTERY
+      MYSERIAL.print("VALOR BATERIA: ");
+      MYSERIAL.print(batteryLevel);
+      MYSERIAL.print(" OU ");
+      MYSERIAL.print(getBatteryLevelInPercentage());
+      MYSERIAL.print("%  ");
+      MYSERIAL.print("   MINIMO: ");
+      MYSERIAL.print(batteryMinimumLevelInStep);
+      MYSERIAL.print(" - MAXIMO: ");
+      MYSERIAL.println(batteryMaximumLevelInStep);
+    #endif
+    
+  }
+  
   return batteryLevel;
+}
+
+void makeBatteryRead(){
+  batteryReads[batteryReadPointer++] = analogRead(powerInVoltage);
+  
+  if (batteryReadPointer == batteryReadSamples){
+    #ifdef DEBUG_BATTERY
+      MYSERIAL.print("batteryReadPointer = 0");
+    #endif
+    
+    batteryReadPointer = 0;
+  }
+}
+
+int getBatteryMediaLevel(){
+  int allReads = 0;
+  int numberOfValidSamples = 0;
+
+  for (int i = 0; i < batteryReadSamples; i++){
+    if (batteryReads[i]){
+      numberOfValidSamples++;
+      allReads += batteryReads[i];
+    }
+  }
+
+  return allReads / numberOfValidSamples;
 }
 
 int getBatteryLevelInPercentage(){
@@ -29,19 +69,9 @@ int getBatteryLevelInPercentage(){
 void checkIfNeedsToShutdown(){
   
   if (readBatteryLevel() <= batteryMinimumLevelInStep){
-    sameResultsOnBatteryStatusCount++;
-    
-    MYSERIAL.print("Pico de uso da bateria: ");
-    MYSERIAL.println(sameResultsOnBatteryStatusCount);
-    
-    if (sameResultsOnBatteryStatusCount == 10){
-      powerDown();
-      MYSERIAL.println("Desligado para nao afetar a bateria");
-    }
-  }else{
-    sameResultsOnBatteryStatusCount = 0;
+    MYSERIAL.println("Desligado para nao afetar a bateria");
+    powerDown();
   }
-  
 }
 
 

@@ -10,7 +10,7 @@
 #define DEBUG_BALANCING 1
 #define DEBUG_MOTORS 1
 #define DEBUG_SERIAL 1
-//#define DEBUG_BATTERY 1
+#define DEBUG_BATTERY 1
 //#define DEBUG_NOTEBOOK 1
 
 int entireRoundStep = 125;
@@ -24,7 +24,6 @@ const int powerOnPin = 12;
 const int powerInVoltage = A7;
 const int powerUpNotebookPin = 24;
 int batteryLevel = 0;
-int sameResultsOnBatteryStatusCount = 0;
 
 // Controle de carga com a base de conexao esterna
 const int externalPowerPin = 23;
@@ -33,7 +32,7 @@ const int timeInSecondsToStartCharging = 3;
 const int batteryPercentageToStartCharging = 80;
 
 // Garante que o sistema desligue se a bateria chegar a 13.3V
-int batteryMinimumLevelInStep = 680;
+int batteryMinimumLevelInStep = 650;
 int batteryMaximumLevelInStep = 830;
 
 const int sensorRightPin = A0;
