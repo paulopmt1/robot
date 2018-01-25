@@ -34,7 +34,7 @@ void proccessRightMotor(){
   int sensorRightValue = analogRead(sensorRightPin);
   
   if (sensorRightValue < sensorWrongValueMin){
-    MYSERIAL.println("Parece que o sensor da roda da direita esta com problemas");
+    //MYSERIAL.println("Parece que o sensor da roda da direita esta com problemas");
   }
 
   if (sensorRightValue < rightSensorMinValue){
@@ -92,7 +92,7 @@ void proccessLeftMotor(){
   int sensorLeftValue = analogRead(sensorLeftPin);
   
   if (sensorLeftValue < sensorWrongValueMin){
-    MYSERIAL.println("Parece que o sensor da roda da esquerda esta com problemas");
+    //MYSERIAL.println("Parece que o sensor da roda da esquerda esta com problemas");
   }
 
   if (sensorLeftValue < leftSensorMinValue){

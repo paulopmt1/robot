@@ -79,7 +79,7 @@ void powerUp(){
   digitalWrite(powerOnPin, HIGH);
 }
 void powerDown(){
-  digitalWrite(powerOnPin, LOW);
+  //digitalWrite(powerOnPin, LOW);
 }
 
 

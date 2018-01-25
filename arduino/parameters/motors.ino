@@ -1,23 +1,29 @@
 
 
+
+
 void stopNow(){
   stopNowSolicited = true;
 }
 
 void goFront(){
-  goFrontWithBalancing();
+  //goFrontWithBalancing();
+  goFrontWithNoBalancing();
 }
 
 void goBack(){
-  goBackWithBalancing();
+  //goBackWithBalancing();
+  goBackWithNoBalancing();
 }
 
 void goLeft(){
-  goLeftWithBalancing();
+  //goLeftWithBalancing();
+  goLeftWithNoBalancing();
 }
 
 void goRight(){
-  goRightWithBalancing();
+  //goRightWithBalancing();
+  goRightWithNoBalancing();
 }
 
 
