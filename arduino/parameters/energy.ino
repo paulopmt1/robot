@@ -82,7 +82,7 @@ void powerUp(){
   Serial1.println("ROBOT_STARTUP");
 }
 void powerDown(){
-  digitalWrite(powerOnPin, LOW);
+  //digitalWrite(powerOnPin, LOW);
 }
 
 

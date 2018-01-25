@@ -5,7 +5,7 @@ void loop(){
   readStepSensors();
   processSerialCommand();
   checkChargingBase();
-  sendBatteryStatus();
+  //sendBatteryStatus();
 
   if (needsToStopNow() && serialLastCommandTimeout()){
     disableLeftBridge();
