@@ -30,6 +30,7 @@ const int externalPowerPin = 23;
 const int externalBatteryChargerPin = 22;
 const int timeInSecondsToStartCharging = 3;
 const int batteryPercentageToStartCharging = 80;
+const int externalWifiPowerPin = 26;
 
 // Garante que o sistema desligue se a bateria chegar a 13.3V
 int batteryMinimumLevelInStep = 640;

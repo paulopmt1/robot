@@ -5,6 +5,7 @@ void loop(){
   readStepSensors();
   processSerialCommand();
   checkChargingBase();
+  checkIfNeedsToRebootWifiAdapter();
   //sendBatteryStatus();
 
   if (needsToStopNow() && serialLastCommandTimeout()){

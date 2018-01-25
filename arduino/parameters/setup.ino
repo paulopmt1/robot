@@ -26,6 +26,8 @@ void setup(){
   digitalWrite(powerUpNotebookPin, HIGH);
   pinMode(externalBatteryChargerPin, OUTPUT);
   digitalWrite(externalBatteryChargerPin, HIGH);
+  pinMode(externalWifiPowerPin, OUTPUT);
+  digitalWrite(externalWifiPowerPin, HIGH);
   
   powerUp();
   
