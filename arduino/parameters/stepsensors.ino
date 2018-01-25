@@ -38,14 +38,12 @@ void proccessRightMotor(){
   }
 
   if (sensorRightValue < rightSensorMinValue){
-    Serial1.println("INFO_MOTOR_RIGHT: Alterando valor minimo do sensor right para: " + String(sensorRightValue));
     MYSERIAL.print("Alterando valor minimo do sensor right para: ");
     MYSERIAL.println(sensorRightValue);
     rightSensorMinValue = sensorRightValue;
   }
   
   if (sensorRightValue > rightSensorMaxValue){
-    //Serial1.println("INFO_MOTOR_RIGHT: Alterando valor maximo do sensor right para: " + String(sensorRightValue));
     MYSERIAL.print("Alterando valor maximo do sensor right para: ");
     MYSERIAL.println(sensorRightValue);
     rightSensorMaxValue = sensorRightValue;
@@ -98,7 +96,6 @@ void proccessLeftMotor(){
   }
 
   if (sensorLeftValue < leftSensorMinValue){
-    Serial1.println("INFO_MOTOR_LEFT: Alterando valor minimo do sensor left para: " + String(leftSensorMaxValue));
     
     #ifdef DEBUG_SENSOR_WHEEL_STEP_LEFT
       MYSERIAL.print("Alterando valor minimo do sensor left para: ");
@@ -109,7 +106,6 @@ void proccessLeftMotor(){
   }
   
   if (sensorLeftValue > leftSensorMaxValue){
-    //Serial1.println("INFO_MOTOR_LEFT: Alterando valor maximo do sensor left para: " + String(leftSensorMaxValue));
     
     #ifdef DEBUG_SENSOR_WHEEL_STEP_LEFT
       MYSERIAL.print("Alterando valor maximo do sensor left para: ");
