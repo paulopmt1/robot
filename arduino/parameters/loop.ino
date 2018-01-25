@@ -1,7 +1,7 @@
 
 void loop(){
   readBatteryLevel();
-  //checkIfNeedsToShutdown();
+  checkIfNeedsToShutdown();
   readStepSensors();
   processSerialCommand();
   checkChargingBase();

@@ -67,9 +67,11 @@ int getBatteryLevelInPercentage(){
 }
 
 void checkIfNeedsToShutdown(){
-  
-  if (readBatteryLevel() <= batteryMinimumLevelInStep){
+
+  if (batteryLevel > 0 && batteryLevel <= batteryMinimumLevelInStep){
+    Serial1.println("FATAL_SHUTDOWN: Desligando para nao afetar a bateria");
     MYSERIAL.println("Desligado para nao afetar a bateria");
+    delay(1000);
     powerDown();
   }
 }
@@ -77,6 +79,7 @@ void checkIfNeedsToShutdown(){
 
 void powerUp(){
   digitalWrite(powerOnPin, HIGH);
+  Serial1.println("ROBOT_STARTUP");
 }
 void powerDown(){
   digitalWrite(powerOnPin, LOW);
@@ -116,6 +119,8 @@ void startBatteryCharging(){
   delay(1000);
   digitalWrite(externalBatteryChargerPin, 1);
 
+  Serial1.println("BATTERY_CHARGING_STARTED");
+  
   #ifdef DEBUG_BATTERY
     MYSERIAL.println("Carregamento da bateria iniciado");
   #endif
@@ -142,6 +147,6 @@ void printBatteryLevel(){
   MYSERIAL.print("BATERIA: ");
   MYSERIAL.print(getBatteryLevelInPercentage());
   MYSERIAL.println("%");
-  Serial1.println("BATERIA:" + String(readBatteryLevel()));
+  Serial1.println("BATERIA_ORIGINAL:" + String(readBatteryLevel()) + " BATERIA_PERCENTUAL:" + getBatteryLevelInPercentage());
 }
 
