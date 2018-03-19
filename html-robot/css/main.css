@@ -1,0 +1,14 @@
+
+body{
+	margin: 0;
+	border: 0;
+}
+
+#my-video{
+	height: 100%;
+    position: fixed;
+}
+
+#their-video{
+	
+}

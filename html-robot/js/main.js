@@ -1,0 +1,202 @@
+
+    // Compatibility shim
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+    // PeerJS object
+    var peer = new Peer({ key: 'peerjs', debug: 3, host: '187.18.44.12', path: 'teste'});
+
+
+
+
+    //var peer = new Peer('someid', {host: 'localhost', port: 9000, path: '/myapp'});
+
+    /*var peer = new Peer({
+	  config: {'iceServers': [
+	    { url: 'stun:stun.l.google.com:19302' },
+	    { url: 'turn:homeo@turn.bistri.com:80', credential: 'homeo' }
+	  ]} 
+	});*/
+
+    peer.on('open', function(){
+      $('#my-id').text(peer.id);
+    });
+
+    // Receiving a call
+    peer.on('call', function(call){
+      // Answer the call automatically (instead of prompting user) for demo purposes
+      call.answer(window.localStream);
+      step3(call);
+    });
+    peer.on('error', function(err){
+      alert(err.message);
+      // Return to step 2 if error occurs
+      step2();
+    });
+
+    // Click handlers setup
+    $(function(){
+      $('#make-call').click(function(){
+        // Initiate a call!
+        var call = peer.call($('#callto-id').val(), window.localStream);
+
+        step3(call);
+      });
+
+      $('#end-call').click(function(){
+        window.existingCall.close();
+        step2();
+      });
+
+      // Retry if getUserMedia fails
+      $('#step1-retry').click(function(){
+        $('#step1-error').hide();
+        step1();
+      });
+
+      
+    });
+
+    function step1 () {
+      // Get audio/video stream
+      navigator.getUserMedia({audio: true, video: true}, function(stream){
+        // Set your video displays
+        $('#my-video').prop('src', URL.createObjectURL(stream));
+
+        window.localStream = stream;
+        step2();
+      }, function(){ $('#step1-error').show(); });
+    }
+
+    function step2 () {
+      $('#step1, #step3').hide();
+      $('#step2').show();
+    }
+
+    function step3 (call) {
+      // Hang up on an existing call if present
+      if (window.existingCall) {
+        window.existingCall.close();
+      }
+
+      // Wait for stream on the call, then set peer video display
+      call.on('stream', function(stream){
+        $('#their-video').prop('src', URL.createObjectURL(stream));
+      });
+
+      // UI stuff
+      window.existingCall = call;
+      $('#their-id').text(call.peer);
+      call.on('close', step2);
+      $('#step1, #step2').hide();
+      $('#step3').show();
+    }
+
+
+
+
+
+
+
+function handleError(error) {
+  console.log('navigator.getUserMedia error: ', error);
+}
+
+
+function gotStream(stream) {
+  window.stream1 = stream; // make stream available to console
+  $('#my-video').prop('src',  URL.createObjectURL(stream));
+
+    navigator.mediaDevices.getUserMedia({
+      audio: {deviceId: false},
+      video: {deviceId: deviceIdWebcam2}
+    }).then(gotStream2).catch(handleError);
+}
+
+function gotStream2(stream) {
+  window.stream2 = stream;
+
+  // Composite videos
+  var composite = new VideoStreamMerger()
+  composite.addStream(window.stream1)
+  
+  composite.addStream(window.stream2, {
+    //x: composite.width - 50,
+    y: composite.height - 80,
+    width: 80,
+    height: 80
+  });
+  composite.start()
+  //videoElement.srcObject = composite.result;
+
+
+  // Set your video displays
+	$('#my-video').prop('src', URL.createObjectURL(composite.result));
+
+	window.localStream = composite.result;
+	step2();
+
+}
+
+
+function start() {
+  deviceIdWebcam1 = document.getElementById('frontCamera').value;
+  deviceIdWebcam2 = document.getElementById('bottomCamera').value;
+
+  //deviceIdWebcam1 = '7jWz9LpbzZytnvA/T+RAc1y+dBp8YwmaYTb/F7KyN68=';
+  //deviceIdWebcam2 = 'Wk1xw9QasTA+RzLg0rFhQMhr9E9+TstLRyqm2YG4m9Q=';
+
+  //deviceIdWebcam1 = 'Wk1xw9QasTA+RzLg0rFhQMhr9E9+TstLRyqm2YG4m9Q=';
+  //deviceIdWebcam2 = 'Wk1xw9QasTA+RzLg0rFhQMhr9E9+TstLRyqm2YG4m9Q=';
+
+  if (window.stream) {
+    window.stream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+  }
+
+  navigator.mediaDevices.getUserMedia({
+    audio: {deviceId: false},
+    video: {deviceId: deviceIdWebcam1}
+  }).then(gotStream).catch(handleError);
+  
+
+
+}
+
+
+$('#start').click(function(){
+  start();
+})
+
+
+
+
+
+
+function listCameraDevices(deviceInfos) {
+  console.log(deviceInfos);
+  
+  
+  for (var i = 0; i !== deviceInfos.length; ++i) {
+    var deviceInfo = deviceInfos[i];
+    
+
+    if (deviceInfo.kind === 'videoinput') {
+      var option = document.createElement('option');
+      option.value = deviceInfo.deviceId;
+      option.text = deviceInfo.label;
+
+      document.getElementById('frontCamera').appendChild(option);
+
+
+      var option2 = document.createElement('option');
+      option2.value = deviceInfo.deviceId;
+      option2.text = deviceInfo.label;
+
+      document.getElementById('bottomCamera').appendChild(option2);
+    }
+  }
+
+}
+
+navigator.mediaDevices.enumerateDevices().then(listCameraDevices).catch(handleError);
