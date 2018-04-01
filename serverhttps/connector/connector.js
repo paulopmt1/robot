@@ -32,6 +32,8 @@ console.log('se foi cara');
 setTimeout(function(){
         console.log('teste');
         socket.emit('identify', {type:'interconnector'});
+	socket2.emit('identify', {type:'interconnector'});
+
 },1000);
 
 

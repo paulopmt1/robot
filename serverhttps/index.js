@@ -5,8 +5,8 @@ var fs = require('fs');
 var activeConnections = [];
 
 var server = https.createServer({ 
-                key: fs.readFileSync('robot.paulotrentin.com.br/privkey1.pem'),
-                cert: fs.readFileSync('robot.paulotrentin.com.br/fullchain1.pem') 
+                key: fs.readFileSync('/var/www/html/robot/serverhttps/robot.paulotrentin.com.br/privkey1.pem'),
+                cert: fs.readFileSync('/var/www/html/robot/serverhttps/robot.paulotrentin.com.br/fullchain1.pem') 
              },app);
 server.listen(3002);
 
