@@ -1,9 +1,19 @@
+var toCall = false;
+
 
     // Compatibility shim
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    var id = document.location.hash;
+
+    if (document.location.hash.split('/').length > 1){
+      id = document.location.hash.split('/')[0];
+      toCall = document.location.hash.split('/')[1];
+    }
+
+    id = id.replace('#','');
 
     // PeerJS object
-    var peer = new Peer({ key: 'peerjs', debug: 3, host: '187.18.44.12', path: 'teste'});
+    var peer = new Peer(id, { key: 'peerjs', debug: 3, host: '187.18.35.117', path: 'teste'});
 
 
 
@@ -19,6 +29,14 @@
 
     peer.on('open', function(){
       $('#my-id').text(peer.id);
+
+      setTimeout(function(){
+        if (toCall){
+          var call = peer.call(toCall, window.localStream);
+          step3(call);
+        }
+      }, 1000);
+      
     });
 
     // Receiving a call
@@ -38,7 +56,6 @@
       $('#make-call').click(function(){
         // Initiate a call!
         var call = peer.call($('#callto-id').val(), window.localStream);
-
         step3(call);
       });
 
@@ -108,7 +125,7 @@ function gotStream(stream) {
 
     navigator.mediaDevices.getUserMedia({
       audio: {deviceId: false},
-      video: {deviceId: deviceIdWebcam2}
+      video: {deviceId: localStorage.bottomCamera}
     }).then(gotStream2).catch(handleError);
 }
 
@@ -141,6 +158,12 @@ function gotStream2(stream) {
 function start() {
   deviceIdWebcam1 = document.getElementById('frontCamera').value;
   deviceIdWebcam2 = document.getElementById('bottomCamera').value;
+  robotMic = document.getElementById('robotMic').value;
+
+  localStorage.setItem("frontCamera", deviceIdWebcam1);
+  localStorage.setItem("bottomCamera", deviceIdWebcam2);
+  localStorage.setItem("robotMic", robotMic);
+
 
   //deviceIdWebcam1 = '7jWz9LpbzZytnvA/T+RAc1y+dBp8YwmaYTb/F7KyN68=';
   //deviceIdWebcam2 = 'Wk1xw9QasTA+RzLg0rFhQMhr9E9+TstLRyqm2YG4m9Q=';
@@ -155,8 +178,8 @@ function start() {
   }
 
   navigator.mediaDevices.getUserMedia({
-    audio: {deviceId: false},
-    video: {deviceId: deviceIdWebcam1}
+    audio: {deviceId: localStorage.robotMic},
+    video: {deviceId: localStorage.frontCamera}
   }).then(gotStream).catch(handleError);
   
 
@@ -166,11 +189,7 @@ function start() {
 
 $('#start').click(function(){
   start();
-})
-
-
-
-
+});
 
 
 function listCameraDevices(deviceInfos) {
@@ -195,7 +214,25 @@ function listCameraDevices(deviceInfos) {
 
       document.getElementById('bottomCamera').appendChild(option2);
     }
+
+    if (deviceInfo.kind === 'audioinput'){
+      var option2 = document.createElement('option');
+      option2.value = deviceInfo.deviceId;
+      option2.text = deviceInfo.label;
+
+      document.getElementById('robotMic').appendChild(option2);
+    }
   }
+
+
+  if (localStorage.robotMic){
+    $('#robotMic').val(localStorage.robotMic);
+    $('#frontCamera').val(localStorage.frontCamera);
+    $('#bottomCamera').val(localStorage.bottomCamera);
+  }
+
+
+  start();
 
 }
 

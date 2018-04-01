@@ -5,27 +5,51 @@
   <script src="js/peer.js"></script>
   <link type="text/css" href="css/main.css" rel="stylesheet"></link>
   <script src="js/video-stream-merger.js"></script>
-  
+  <script src="https://use.fontawesome.com/fa4e67e080.js"></script>
+
+  <script src="js/socket.io.js" type="text/javascript"></script>
+  <script src="js/robot.js"></script>
 </head>
 
 <body>
 
   <div class="pure-g">
 
-      <span>Camera frontal: </span>
-      <select id="frontCamera"></select>
-      <br>
+      <div id="topmenu">
+        <div class="battery-icon charging">
+          <div class="battery-top"></div>
+          <div class="battery-base">
+            <i class="fa fa-bolt" aria-hidden="true"></i>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+        </div>
 
-      <span>Camera de baixo: </span>
-      <select id="bottomCamera"></select>
 
-      <button id=start>Vai!</button>
+          <span>Camera frontal: </span>
+          <select id="frontCamera"></select>
+          <br>
+          <span>Camera de baixo: </span>
+          <select id="bottomCamera"></select>
+          <br>
+          <span>Microfone Robo: </span>
+          <select id="robotMic"></select>
+
+          <button id=start>Vai!</button>
+
+      </div>
 
       <!-- Video area -->
-      <div class="pure-u-2-3" id="video-container">
-        <video id="their-video" autoplay></video>
-        <video id="my-video" muted="true" autoplay></video>
-      </div>
+      <video id="their-video" autoplay></video>
+      <video id="my-video" muted="true" autoplay></video>
 
       <!-- Steps -->
       <div class="pure-u-1-3">
