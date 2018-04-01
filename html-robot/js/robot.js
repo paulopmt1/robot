@@ -20,6 +20,11 @@ var socket, lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
 
 
 	$(document).ready(function(){
+		$('.powerup').click(function(){
+			socket.emit('userCommand', {'command':'LIGAR_NOTEBOOK'});
+		});
+
+
 		init("robot.paulotrentin.com.br:3002");
 
 		$('#serverAddress').change(function(){
