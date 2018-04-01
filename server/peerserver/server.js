@@ -6,7 +6,7 @@ var server = PeerServer({
 	  debug: true,
 			path: 'teste',
 	  ssl: {
-		      key: fs.readFileSync('/etc/apache2/ssl/phpit.key'),
-		      cert: fs.readFileSync('/etc/apache2/ssl/phpit.pem')
+		      key: fs.readFileSync('/var/www/html/robot/serverhttps/robot.paulotrentin.com.br/privkey1.pem'),
+		      cert: fs.readFileSync('/var/www/html/robot/serverhttps/robot.paulotrentin.com.br/fullchain1.pem')
 		    }
 });

@@ -13,7 +13,7 @@ var toCall = false;
     id = id.replace('#','');
 
     // PeerJS object
-    var peer = new Peer(id, { key: 'peerjs', debug: 3, host: '187.18.35.117', path: 'teste'});
+    var peer = new Peer(id, { key: 'peerjs', debug: 3, host: 'robot.paulotrentin.com.br', path: 'teste'});
 
 
 
