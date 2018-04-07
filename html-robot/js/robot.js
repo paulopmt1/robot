@@ -15,6 +15,11 @@ var socket, lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
 
 		socket.on('robotData', function(msg){
 			console.log(msg);
+
+			if (msg.data.indexOf('BATERIA_PERCENTUAL') > -1){
+				var statusText = msg.data.split('BATERIA_PERCENTUAL:')[1]
+				$('.battery-icon .status').html(statusText + '%');
+			}
 		});
 	}
 

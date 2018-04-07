@@ -35,6 +35,7 @@ body{
     background: #f4980f;
 }
 .battery-base {
+	position: relative;
     background: #f4980f;
     padding-top: 2px;
     width: 30px;
@@ -44,6 +45,14 @@ body{
     margin-left: auto;
     margin-right: auto;
     margin-top: 0px;
+}
+
+.battery-base .status{
+    font-size: 0.8em;
+    position: absolute;
+    bottom: 0px;
+    text-align: center;
+    width: 100%;
 }
 
 .battery-icon i {
