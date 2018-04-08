@@ -250,4 +250,4 @@ setInterval(function(){
 		console.log('enviando ' + commandToSend);
 		socket.emit('userCommand', commandToSend);
 	}
-},30);
+},10);

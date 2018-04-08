@@ -17,6 +17,9 @@ var displayType = 'robot';
     // PeerJS object
     var peer = new Peer(id, { key: 'peerjs', debug: 3, host: 'robot.paulotrentin.com.br', path: 'teste'});
 
+    $(document).dblclick(function(){
+      $("#topmenu").toggle();
+    })
 
     if (displayType == 'robot'){
       $("#topmenu").hide();
@@ -137,8 +140,8 @@ function gotStream(stream) {
       audio: {deviceId: false},
       video: {
         deviceId: localStorage.bottomCamera,
-        width: { ideal: 1280 },
-        height: { ideal: 720 }
+        width: { ideal: 640 },
+        height: { ideal: 480 }
       }
     }).then(gotStream2).catch(handleError);
   }
@@ -165,9 +168,9 @@ function gotStream2(stream) {
 
   composite.addStream(window.stream2, {
     //x: composite.width - 50,
-    y: composite.height - bottomCameraWidth * 0.5625,
-    width: bottomCameraWidth,
-    height: bottomCameraWidth * 0.5625
+    y: composite.height - 240,
+    width: 320,
+    height: 240
   });
   composite.start()
   //videoElement.srcObject = composite.result;
