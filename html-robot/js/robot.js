@@ -107,7 +107,6 @@ var socket, lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
                 
         $(document).keydown(function(data){
             //console.log(data.keyCode)
-            return;
 
             switch (data.keyCode){
                 case 87:
@@ -237,6 +236,7 @@ Input(document, function(keys){
 });
 
 
+/*
 var canSend = false;
 var commandToSend = false;
 
@@ -251,3 +251,4 @@ setInterval(function(){
 		socket.emit('userCommand', commandToSend);
 	}
 },10);
+*/
