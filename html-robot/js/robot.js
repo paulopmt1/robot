@@ -103,36 +103,151 @@ var socket, lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
 			var command = $(this).attr('command');
 			socket.emit('userCommand', command);
 		});
+
                 
-                $(document).keydown(function(data){
-                    console.log(data.keyCode)
+        $(document).keydown(function(data){
+            //console.log(data.keyCode)
+            return;
+
+            switch (data.keyCode){
+                case 87:
+                case 38:
+                    data.preventDefault();
+                    socket.emit('userCommand', '|W');
+                    break;
                     
-                    switch (data.keyCode){
-                        case 87:
-                        case 38:
-                            data.preventDefault();
-                            socket.emit('userCommand', '|W');
-                            break;
-                            
-                        case 83:
-                        case 40:
-                            data.preventDefault();
-                            socket.emit('userCommand', '|S');
-                            break;
-                            
-                        case 65:
-                        case 37:
-                            data.preventDefault();
-                            socket.emit('userCommand', '|A');
-                            break;
-                            
-                        case 68:
-                        case 39:
-                            data.preventDefault();
-                            socket.emit('userCommand', '|D');
-                            break;
-                    }
+                case 83:
+                case 40:
+                    data.preventDefault();
+                    socket.emit('userCommand', '|S');
+                    break;
                     
-                });
+                case 65:
+                case 37:
+                    data.preventDefault();
+                    socket.emit('userCommand', '|A');
+                    break;
+                    
+                case 68:
+                case 39:
+                    data.preventDefault();
+                    socket.emit('userCommand', '|D');
+                    break;
+            }
+            
+        });
 
 	});
+
+
+
+
+function Input(el, eventCallback){
+    var parent = el,
+        map = {},
+        intervals = {};
+
+
+    map.ArrowRight = false;
+    map.ArrowLeft = false;
+    map.ArrowUp = false;
+    map.ArrowDown = false;
+
+    function ev_kdown(ev)
+    {
+        map[ev.key] = true;
+        ev.preventDefault();
+        eventCallback(map);
+        return;
+    }
+
+    function ev_kup(ev)
+    {
+        map[ev.key] = false;
+        ev.preventDefault();
+        eventCallback(map);
+        return;
+    }
+
+    function key_down(key)
+    {
+        return map[key];
+    }
+
+    function clear()
+    {
+        map = {};
+    }
+
+    function attach()
+    {
+        parent.addEventListener("keydown", ev_kdown);
+        parent.addEventListener("keyup", ev_kup);
+    }
+
+    function Input()
+    {
+        attach();
+    }
+
+    return Input();
+}
+
+
+Input(document, function(keys){
+	
+	console.log(keys);
+
+	if ( keys.ArrowUp && ! keys.ArrowLeft && ! keys.ArrowRight){
+		console.log('frente somente');
+		startCommand('|W');
+	}
+	else if ( ! keys.ArrowUp && ! keys.ArrowLeft && ! keys.ArrowRight && keys.ArrowDown){
+		console.log('traz somente');
+		startCommand('|S');
+	}
+
+	else if ( ! keys.ArrowUp && keys.ArrowLeft){
+		console.log('esquerda somente');
+		startCommand('|A');
+	}
+
+	else if ( ! keys.ArrowUp && keys.ArrowRight){
+		console.log('direita somente');
+		startCommand('|D');
+	}
+
+	else if (keys.ArrowUp && keys.ArrowRight){
+		console.log('frente direita');
+		//startCommand('|W');	
+		//startCommand('|D');	
+	}
+
+	else if ( ! keys.ArrowUp && ! keys.ArrowLeft && ! keys.ArrowRight && ! keys.ArrowDown){
+		console.log('Para tudo!');
+		canSend = false;
+	}
+
+	else{
+		console.log('Para tudo!');
+		canSend = false;
+	}
+
+
+});
+
+
+var canSend = false;
+var commandToSend = false;
+
+function startCommand(command){
+	canSend = true;
+	commandToSend = command;
+}
+
+setInterval(function(){
+	if (canSend){
+		console.log('enviando ' + commandToSend);
+		socket.emit('userCommand', commandToSend);
+	}
+},30);
