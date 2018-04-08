@@ -152,7 +152,7 @@ function gotStream2(stream) {
   window.stream2 = stream;
 
   // Composite videos
-  var composite = new VideoStreamMerger({
+  composite = new VideoStreamMerger({
     width: 1280,
     height: 720
   })
@@ -184,6 +184,38 @@ function gotStream2(stream) {
 
 }
 
+
+function setBottomCameraSize(bottomCameraSize){
+  if (displayType == 'html-client'){
+    return;
+  }
+
+  composite.removeStream(window.stream2);
+  var newWidth, newHeight;
+
+  switch(bottomCameraSize){
+    case 'p':
+      newWidth = 106;
+      newHeight = 80;
+      break;
+
+    case 'm':
+      newWidth = 320;
+      newHeight = 240;
+      break;
+
+    case 'g':
+      newWidth = 1024;
+      newHeight = 768;
+      break;
+  }
+
+  composite.addStream(window.stream2, {
+    y: composite.height - newHeight,
+    width: newWidth,
+    height: newHeight
+  });
+}
 
 function start() {
   deviceIdWebcam1 = document.getElementById('frontCamera').value;

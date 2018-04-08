@@ -101,3 +101,21 @@ body{
     left: 0;
     width: 100%;
 }
+
+#topmenu .cameras{
+	width: 430px;
+    float: left;
+    padding: 10px;
+    margin-right: 30px;
+}
+
+#topmenu .bottomCameraSize{
+    width: 210px;
+    float: left;
+    padding: 20px;
+    margin-right: 30px;
+}
+
+#topmenu .bottomCameraSize p{
+    margin: 0;
+}

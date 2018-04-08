@@ -6,7 +6,7 @@
   <link type="text/css" href="css/main.css" rel="stylesheet"></link>
   <script src="js/video-stream-merger.js"></script>
   <script src="https://use.fontawesome.com/fa4e67e080.js"></script>
-
+  <meta http-equiv="Content-Type" content="text/html; charset=utf8">
   <script src="js/socket.io.js" type="text/javascript"></script>
   <script src="js/robot.js"></script>
 </head>
@@ -38,7 +38,7 @@
           Ligar / Desligar
         </div>
 
-
+        <div class="cameras">
           <span>Camera frontal: </span>
           <select id="frontCamera"></select>
           <br>
@@ -49,6 +49,16 @@
           <select id="robotMic"></select>
 
           <button id=start>Vai!</button>
+        </div>
+
+
+        <div class="bottomCameraSize">
+          <p>Tamanho da câmera de baixo:</p>
+          <button size="p">P</button>
+          <button size="m">M</button>
+          <button size="g">G</button>
+        </div>
+
 
       </div>
 

@@ -22,6 +22,14 @@ var socket, lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
 			}
 		});
 
+		socket.on('userCommand', function(msg){
+			console.log(msg);
+
+			if (msg.command && msg.command.indexOf('BOTTOM_CAMERA_SIZE') > -1){
+				setBottomCameraSize(msg.command.split('BOTTOM_CAMERA_SIZE:')[1]);
+			}
+		});
+
 		setInterval(function(){
 			socket.emit('userCommand', {'command':'BATERIA'});
 		},5000);
@@ -102,6 +110,10 @@ var socket, lastOnlineTime = 0, ROBOT_ONLINE_TIMEOUT = 1000;
 
 			var command = $(this).attr('command');
 			socket.emit('userCommand', command);
+		});
+
+		$('.bottomCameraSize').on('click', 'button', function(e){
+			socket.emit('userCommand', {'command':'BOTTOM_CAMERA_SIZE:' + $(this).attr('size')});
 		});
 
                 
