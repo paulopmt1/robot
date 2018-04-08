@@ -1,5 +1,5 @@
 var toCall = false;
-
+var displayType = 'robot';
 
     // Compatibility shim
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -8,6 +8,8 @@ var toCall = false;
     if (document.location.hash.split('/').length > 1){
       id = document.location.hash.split('/')[0];
       toCall = document.location.hash.split('/')[1];
+
+      displayType = 'html-client';
     }
 
     id = id.replace('#','');
@@ -16,6 +18,9 @@ var toCall = false;
     var peer = new Peer(id, { key: 'peerjs', debug: 3, host: 'robot.paulotrentin.com.br', path: 'teste'});
 
 
+    if (displayType == 'robot'){
+      $("#topmenu").hide();
+    }
 
 
     //var peer = new Peer('someid', {host: 'localhost', port: 9000, path: '/myapp'});
@@ -123,24 +128,46 @@ function gotStream(stream) {
   window.stream1 = stream; // make stream available to console
   $('#my-video').prop('src',  URL.createObjectURL(stream));
 
+
+  if (displayType == 'html-client'){
+    window.localStream = stream;
+    step2();
+  }else{
     navigator.mediaDevices.getUserMedia({
       audio: {deviceId: false},
-      video: {deviceId: localStorage.bottomCamera}
+      video: {
+        deviceId: localStorage.bottomCamera,
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      }
     }).then(gotStream2).catch(handleError);
+  }
+    
 }
 
 function gotStream2(stream) {
   window.stream2 = stream;
 
   // Composite videos
-  var composite = new VideoStreamMerger()
-  composite.addStream(window.stream1)
-  
+  var composite = new VideoStreamMerger({
+    width: 1280,
+    height: 720
+  })
+  composite.addStream(window.stream1, {
+    x: 0,
+    y: 0,
+    width: composite.width,
+    height: composite.height
+  })
+
+  console.log('largura: ' + composite.width)
+  var bottomCameraWidth = composite.width * 20 / 100;
+
   composite.addStream(window.stream2, {
     //x: composite.width - 50,
-    y: composite.height - 80,
-    width: 80,
-    height: 80
+    y: composite.height - bottomCameraWidth * 0.5625,
+    width: bottomCameraWidth,
+    height: bottomCameraWidth * 0.5625
   });
   composite.start()
   //videoElement.srcObject = composite.result;
@@ -179,7 +206,11 @@ function start() {
 
   navigator.mediaDevices.getUserMedia({
     audio: {deviceId: localStorage.robotMic},
-    video: {deviceId: localStorage.frontCamera}
+    video: {
+      deviceId: localStorage.frontCamera,
+      width: { ideal: 1280 },
+      height: { ideal: 720 }
+    }
   }).then(gotStream).catch(handleError);
   
 
