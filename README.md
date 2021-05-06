@@ -6,6 +6,10 @@ In this repo, I share the software to remotly controll this little guy. We have 
 
 ![P_20180204_144322](https://user-images.githubusercontent.com/1044309/117308633-1e154e80-ae58-11eb-9bca-a72818a826ea.jpg)
 
+## Control Interface (web with socket.io)
+![image](https://user-images.githubusercontent.com/1044309/117309462-d04d1600-ae58-11eb-9ba0-2c549889548c.png)
+
+
 ## Video of the robot
 https://user-images.githubusercontent.com/1044309/117308735-32594b80-ae58-11eb-8a59-73412d6e5fe6.mp4
 
