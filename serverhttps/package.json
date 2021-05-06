@@ -5,7 +5,7 @@
   "dependencies": {
     "daemonize2": "0.4.2",
     "express": "^4.10.2",
-    "socket.io": "^1.4.8",
+    "socket.io": "^2.4.0",
     "ws": "^5.1.0"
   }
 }
