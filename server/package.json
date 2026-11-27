@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "my first socket.io app",
   "dependencies": {
-    "express": "^4.10.2",
-    "socket.io": "^1.4.8",
+    "express": "^5.3.0",
+    "socket.io": "^4.8.4",
     "daemonize2": "0.4.2"
   }
 }
